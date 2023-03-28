@@ -18,6 +18,8 @@
   "homepage": "https://github.com/JorchCanelo/Proyecto-DevOps-2023#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mysql": "^2.18.1",
     "supertest": "^6.3.3"
   }
 }
