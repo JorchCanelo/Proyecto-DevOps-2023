@@ -123,7 +123,7 @@ app.get('/comentarios', (req, res) => {
   app.post('/tareas', (req, res) => {
     let tarea = req.body;
     var sql = "INSERT INTO tareas (nombre, descripcion, estado, fecha_entrega, proyecto_asociado) VALUES (?, ?, ?, ?, ?)";
-    connection.query(sql, [tarea.nombre, tarea.descripcion, tarea.estado, tarea.fecha_entrega, fecha.proyecto_asociado], (err, rows, fields) => {
+    connection.query(sql, [tarea.nombre, tarea.descripcion, tarea.estado, tarea.fecha_entrega, tarea.proyecto_asociado], (err, rows, fields) => {
       if (!err)
         res.send("Tarea agregada exitosamente.");
       else
@@ -134,18 +134,18 @@ app.get('/comentarios', (req, res) => {
   app.put('/tareas/:id', (req, res) => {
     let tarea = req.body;
     var sql = "UPDATE tareas SET nombre = ?, descripcion = ?, estado = ?, fecha_entrega = ?, proyecto_asociado = ? WHERE id = ?";
-    connection.query(sql, [tarea.nombre, tarea.descripcion, tarea.estado, tarea.fecha_entrega, fecha.proyecto_asociado, req.params.id], (err, rows, fields) => {
+    connection.query(sql, [tarea.nombre, tarea.descripcion, tarea.estado, tarea.fecha_entrega, tarea.proyecto_asociado, req.params.id], (err, rows, fields) => {
       if (!err)
-        res.send("Tarea actualizado exitosamente.");
+        res.send("Tarea actualizada exitosamente.");
       else
         console.log(err);
     })
   });
 
   app.delete('/tareas/:id', (req, res) => {
-    connection.query('DELETE FROM tareass WHERE id = ?', [req.params.id], (err, rows, fields) => {
+    connection.query('DELETE FROM tareas WHERE id = ?', [req.params.id], (err, rows, fields) => {
       if (!err)
-        res.send("Tarea eliminado exitosamente.");
+        res.send("Tarea eliminada exitosamente.");
       else
         console.log(err);
     })
