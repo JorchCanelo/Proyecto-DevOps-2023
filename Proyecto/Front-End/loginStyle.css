@@ -17,3 +17,7 @@ body {
     padding: 15px;
     margin: auto;
 }
+
+.form-floating{
+    margin: 1rem 0;
+}

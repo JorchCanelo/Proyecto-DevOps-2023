@@ -14,22 +14,33 @@
 </head>
 
 <body class="text-center">
-
     <main class="form-signin">
         <form action="../Back-End/loginScript.js" method="POST">
             <img class="mb-4" src="./assets/Logo.jpg" alt="" width="90" height="150">
-            <h1 class="h3 mb-3 fw-normal">Iniciar Sesión</h1>
+            <h1 class="h3 mb-3 fw-normal">Registrarse</h1>
             <div class="form-floating">
                 <input type="text" class="form-control" id="username" name="username" placeholder="Usuario">
                 <label for="floatingInput">Usuario</label>
             </div>
             <div class="form-floating">
+                <input type="text" class="form-control" id="email" name="email" placeholder="Correo">
+                <label for="floatingPassword">Correo</label>
+            </div>
+            <div class="form-floating">
                 <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña">
                 <label for="floatingPassword">Contraseña</label>
             </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirmar contraseña">
+                <label for="floatingPassword">Confirmar contraseña</label>
+            </div>
+
+
             </br>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Entrar</button>
-            <a href="signin.html">Registrarse</a>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Registrarse</button>
+
+            <a class="regresar" href="login.html">Regresar</a>
+
             <p class="mt-5 mb-3 text-muted">©2023</p>
             
         </form>
