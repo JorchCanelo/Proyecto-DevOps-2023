@@ -1,26 +1,62 @@
 const express = require('express');
-const mysql = require('mysql');
 const router = express.Router();
 const connection = require('./dbConnection');
-const session = require('express-session');
+const auth = require('./auth');
 
 //Registrar usuario
 router.post('/register', (req, res) => {
-	const username = req.body.username;
-	const email = req.body.email;
-	const password = req.body.password;
-	const date = new Date();
-	const createdDate = date.toLocaleString();
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const date = new Date();
+    const createdDate = date.toLocaleString();
 
-	connection.query('INSERT INTO usuarios SET ?', {username: username, email: email, password: password, createdDate: createdDate}, async(error, results) => {
-		if(error){
-			console.log(error);
-		}else{
-			console.log('Registro exitoso');
-			return res.redirect('/');
-		}
-	})
-	
+    connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, createdDate: createdDate }, async (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Registro exitoso');
+            return res.redirect('/');
+        }
+    })
+
+});
+
+//Iniciar sesión
+router.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    const query = `SELECT * FROM usuarios WHERE username = '${username}'`;
+    const date = new Date();
+    const loginDate = date.toLocaleString();
+    const dateQuery = `UPDATE usuarios SET lastLoginDate = '${loginDate}' WHERE username = '${username}'`;
+
+    connection.query(query, (err, results, fields) => {
+        if (err) {
+            console.error(err);
+            res.sendStatus(500);
+            return;
+        }
+
+        const user = results[0];
+
+        if (!user) {
+            return res.status(401).json({ mensaje: "Credenciales inválidas" });
+        }
+
+        if (user.password == password) {
+
+            const token = auth.generarToken(user);
+            console.log(token);
+
+            connection.query(dateQuery, (err, results) => {
+                return res.redirect('entrada');
+            });
+
+        } else {
+            return res.status(401).json({ mensaje: "Credenciales inválidas" });
+        }
+    });
+
 });
 
 // Obtener datos de todos los usuarios

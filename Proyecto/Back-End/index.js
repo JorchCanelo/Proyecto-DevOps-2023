@@ -27,6 +27,11 @@ app.get('/signin', (req, res) => {
 	res.render('signin');
 });
 
+app.get('/entrada', (req, res) => {
+	res.render('entrada');
+});
+
+
 app.use(userManager);
 
 app.listen(puerto, () => console.log(`app listening on http://localhost:${puerto}`));
