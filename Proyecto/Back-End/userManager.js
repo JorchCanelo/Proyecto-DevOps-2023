@@ -45,22 +45,17 @@ router.post('/login', async (req, res) => {
 
         if (user.password == password) {
 
-            
-
-            connection.query(dateQuery, (err, results) => {
+            connection.query(dateQuery, () => {
 
                 const token = auth.generarToken(user);
 
                 console.log('Usuario ingresado');
-                //return res.json({ token });
 
-                console.log(token);
-            
-                //return res.json({ token: token });
+                res.header('authorization', token).json({
+                    message: 'Usuario atenticado',
+                    token: token,
+                });
 
-                
-                //return res.redirect('entrada?token=' + token);
-                 return res.redirect('entrada');
             });
 
         } else {
@@ -72,19 +67,17 @@ router.post('/login', async (req, res) => {
 
 // Obtener datos de todos los usuarios
 router.get('/usuarios', auth.verificarToken, (req, res) => {
-    jwt.verify(req.token, secretKey, (error, authData) => {
-        connection.query('SELECT * FROM usuarios', (error, results) => {
-            if (error) {
-                res.status(500).json({ error: 'Error al obtener los usuarios' });
-            } else {
-                res.json(results);
-            }
-        });
+    connection.query(`SELECT * FROM usuarios`, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Error al obtener los usuarios' });
+        } else {
+            res.json(results);
+        }
     });
 });
 
 // Obtener usuario por id
-router.get('/usuarios/:id', (req, res) => {
+router.get('/usuarios/:id', auth.verificarToken, (req, res) => {
     const id = req.params.id;
     connection.query('SELECT * FROM usuarios WHERE id = ?', [id], (error, results) => {
         if (error) {
@@ -98,9 +91,9 @@ router.get('/usuarios/:id', (req, res) => {
 });
 
 // Actualizar datos de usuario
-router.put('/usuarios/:id', (req, res) => {
+router.put('/usuarios/:id', auth.verificarToken, (req, res) => {
     const id = req.params.id;
-    const { username, email, password } = req.body;
+    const { username, email, password } = {username: "Jorge", email: "jorge@work.com", password: "1234"};
     const updatedUser = { username, email, password };
     connection.query('UPDATE usuarios SET ? WHERE id = ?', [updatedUser, id], (error, result) => {
         if (error) {
@@ -115,7 +108,7 @@ router.put('/usuarios/:id', (req, res) => {
 });
 
 // Eliminar usuario
-router.delete('/usuarios/:id', (req, res) => {
+router.delete('/usuarios/:id', auth.verificarToken, (req, res) => {
     const id = req.params.id;
     connection.query('DELETE FROM usuarios WHERE id = ?', [id], (error, result) => {
         if (error) {

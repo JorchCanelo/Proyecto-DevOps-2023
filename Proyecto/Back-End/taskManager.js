@@ -4,7 +4,7 @@ const app = express();
 const connection = require('./dbConnection');
 const auth = require('./auth');
 
-//tareas
+//Tareas
 
 app.get('/tareas', (req, res) => {
     connection.query('SELECT * FROM tareas', (err, rows, fields) => {
