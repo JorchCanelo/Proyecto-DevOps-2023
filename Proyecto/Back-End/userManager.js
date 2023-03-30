@@ -93,7 +93,7 @@ router.get('/usuarios/:id', auth.verificarToken, (req, res) => {
 // Actualizar datos de usuario
 router.put('/usuarios/:id', auth.verificarToken, (req, res) => {
     const id = req.params.id;
-    const { username, email, password } = {username: "Jorge", email: "jorge@work.com", password: "1234"};
+    const { username, email, password } = req.body;
     const updatedUser = { username, email, password };
     connection.query('UPDATE usuarios SET ? WHERE id = ?', [updatedUser, id], (error, result) => {
         if (error) {
