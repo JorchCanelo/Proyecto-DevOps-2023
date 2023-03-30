@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-03-2023 a las 01:56:50
+-- Tiempo de generación: 30-03-2023 a las 02:43:07
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -34,6 +34,20 @@ CREATE TABLE `comentarios` (
   `fecha` date NOT NULL,
   `estado` varchar(50) NOT NULL,
   `tarea_asociada` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `historial`
+--
+
+CREATE TABLE `historial` (
+  `id` int(11) NOT NULL,
+  `fecha_cambio` varchar(50) NOT NULL,
+  `detalle_cambio` varchar(500) NOT NULL,
+  `responsable` int(11) NOT NULL,
+  `proyecto_asignado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -93,6 +107,14 @@ ALTER TABLE `comentarios`
   ADD KEY `tarea_asociada` (`tarea_asociada`);
 
 --
+-- Indices de la tabla `historial`
+--
+ALTER TABLE `historial`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `responsable_ibfk_1` (`responsable`),
+  ADD KEY `proyecto_ibfk_1` (`proyecto_asignado`);
+
+--
 -- Indices de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
@@ -123,6 +145,12 @@ ALTER TABLE `comentarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `historial`
+--
+ALTER TABLE `historial`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
@@ -138,7 +166,7 @@ ALTER TABLE `tareas`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
@@ -149,6 +177,13 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`tarea_asociada`) REFERENCES `tareas` (`id`);
+
+--
+-- Filtros para la tabla `historial`
+--
+ALTER TABLE `historial`
+  ADD CONSTRAINT `proyecto_ibfk_1` FOREIGN KEY (`proyecto_asignado`) REFERENCES `proyectos` (`id`),
+  ADD CONSTRAINT `responsable_ibfk_1` FOREIGN KEY (`responsable`) REFERENCES `usuarios` (`id`);
 
 --
 -- Filtros para la tabla `proyectos`
