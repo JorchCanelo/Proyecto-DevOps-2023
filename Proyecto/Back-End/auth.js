@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-var secretKey = generateString(30);
+require('dotenv').config();
 
 // generar un token JWT
 function generarToken(usuario) {
@@ -8,40 +8,36 @@ function generarToken(usuario) {
         password: usuario.password
     };
 
-    //return jwt.sign(payload, secretKey, { expiresIn: '1h' });
-    jwt.sign(payload, secretKey, { expiresIn: '1h' }, (res, err, token) => {
-        res.json({ token });
-    });
+    process.env.SECRET_KEY = generateString(30);
+
+    return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1h' });
+
 }
 
 // verificar un token JWT
 function verificarToken(req, res, next) {
-    //const token = req.headers.authorization;
-    //const authHeader = req.headers['authorization'];
-    //const token = authHeader && authHeader.split(' ')[1];
-    const bearerHeader = req.headers['authorization'];
-    console.log(req);
-    console.log(token);
+    try {
 
-    if (typeof bearerHeader !== 'undefined') {
-        const bearerToken = bearerHeader.split(" ")[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        res.sendStatus(403);
-    }
+        const accessToken = req.headers['authorization'] || req.query.accesToken;
 
-    if (!token) {
-        return res.status(401).json({ mensaje: "No se proporcionó un token" });
-    }
-
-    jwt.verify(token, secretKey, function (err, decodedToken) {
-        if (err) {
-            return res.status(401).json({ mensaje: "Token no válido" });
+        if (!accessToken) {
+            res.send('Acceso denegado');
         }
-        req.usuario = decodedToken;
-        next();
-    });
+
+        jwt.verify(accessToken, process.env.SECRET_KEY, (err, user) => {
+
+            if (err) {
+                res.send('Aceso denegado, token expiró');
+            } else {
+                //process.env.TOKEN = accessToken;
+                next();
+            }
+
+        });
+    } catch {
+        console.log("");
+    }
+
 }
 
 function generateString(length) {
@@ -55,4 +51,4 @@ function generateString(length) {
     return result;
 }
 
-module.exports = { generarToken, verificarToken, secretKey };
+module.exports = { generarToken, verificarToken };
