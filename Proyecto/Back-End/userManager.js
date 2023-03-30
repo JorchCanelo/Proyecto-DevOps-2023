@@ -45,11 +45,22 @@ router.post('/login', async (req, res) => {
 
         if (user.password == password) {
 
-            const token = auth.generarToken(user);
-            console.log(token);
+            
 
             connection.query(dateQuery, (err, results) => {
-                return res.redirect('entrada');
+
+                const token = auth.generarToken(user);
+
+                console.log('Usuario ingresado');
+                //return res.json({ token });
+
+                console.log(token);
+            
+                //return res.json({ token: token });
+
+                
+                //return res.redirect('entrada?token=' + token);
+                 return res.redirect('entrada');
             });
 
         } else {
@@ -60,13 +71,15 @@ router.post('/login', async (req, res) => {
 });
 
 // Obtener datos de todos los usuarios
-router.get('/usuarios', (req, res) => {
-    connection.query('SELECT * FROM usuarios', (error, results) => {
-        if (error) {
-            res.status(500).json({ error: 'Error al obtener los usuarios' });
-        } else {
-            res.json(results);
-        }
+router.get('/usuarios', auth.verificarToken, (req, res) => {
+    jwt.verify(req.token, secretKey, (error, authData) => {
+        connection.query('SELECT * FROM usuarios', (error, results) => {
+            if (error) {
+                res.status(500).json({ error: 'Error al obtener los usuarios' });
+            } else {
+                res.json(results);
+            }
+        });
     });
 });
 
