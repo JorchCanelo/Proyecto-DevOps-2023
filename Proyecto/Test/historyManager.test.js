@@ -1,7 +1,5 @@
-const request = require('supertest');
-const express = require('express');
-const app = express();
-const router = require('../historialRouter');
+const request = require('../Back-End/node_modules/supertest');
+const app = require('../Back-End/historyManager');
 
 app.use(express.json());
 app.use(router);

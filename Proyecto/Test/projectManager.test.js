@@ -1,6 +1,6 @@
-const request = require('supertest');
-const express = require('express');
-const router = require('../router');
+const request = require('../Back-End/node_modules/supertest');
+const app = require('../Back-End/projectManager');
+
 describe('GET /proyectos', () => {
   it('responds with a list of projects', (done) => {
     request(app)
