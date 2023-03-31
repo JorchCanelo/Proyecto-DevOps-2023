@@ -1,10 +1,5 @@
-const request = require('supertest');
-const express = require('express');
-const router = require('../router');
-
-const app = express();
-app.use(express.json());
-app.use('/', router);
+const request = require('../Back-End/node_modules/supertest');
+const app = require('../Back-End/userManager');
 
 describe('Test the authentication endpoints', () => {
   test('It should register a new user', async () => {
