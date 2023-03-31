@@ -1,9 +1,9 @@
 const request = require('../Back-End/node_modules/supertest');
-const app = require('../Back-End/userManager');
+const router = require('../Back-End/userManager');
 
 describe('Test the authentication endpoints', () => {
   test('It should register a new user', async () => {
-    const response = await request(app).post('/register').send({
+    const response = await request(router).post('/register').send({
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password',
@@ -13,7 +13,7 @@ describe('Test the authentication endpoints', () => {
   });
 
   test('It should authenticate a user', async () => {
-    const response = await request(app).post('/login').send({
+    const response = await request(router).post('/login').send({
       username: 'testuser',
       password: 'password',
     });
@@ -23,19 +23,19 @@ describe('Test the authentication endpoints', () => {
   });
 
   test('It should return a list of all users', async () => {
-    const response = await request(app).get('/usuarios');
+    const response = await request(router).get('/usuarios');
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
   });
 
   test('It should return a specific user by id', async () => {
-    const response = await request(app).get('/usuarios/1');
+    const response = await request(router).get('/usuarios/1');
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('id', 1);
   });
 
   test('It should update a specific user by id', async () => {
-    const response = await request(app).put('/usuarios/1').send({
+    const response = await request(router).put('/usuarios/1').send({
       username: 'newusername',
       email: 'newemail@example.com',
       password: 'newpassword',
@@ -48,7 +48,7 @@ describe('Test the authentication endpoints', () => {
   });
 
   test('It should delete a specific user by id', async () => {
-    const response = await request(app).delete('/usuarios/1');
+    const response = await request(router).delete('/usuarios/1');
     expect(response.statusCode).toBe(204);
   });
 });

@@ -1,9 +1,9 @@
 const request = require('../Back-End/node_modules/supertest');
-const app = require('../Back-End/commentManager');
+const router = require('../Back-End/commentManager');
 
 describe('Pruebas de rutas de comentarios', () => {
     it('Debería obtener todos los comentarios', async () => {
-      const response = await request(app)
+      const response = await request(router)
         .get('/comentarios')
         .set('Authorization', `Bearer ${token}`); // token de autenticación
       expect(response.status).toBe(200);
@@ -12,7 +12,7 @@ describe('Pruebas de rutas de comentarios', () => {
   
     it('Debería obtener un comentario por id', async () => {
       const id = 1; // id de un comentario existente
-      const response = await request(app)
+      const response = await request(router)
         .get(`/comentarios/${id}`)
         .set('Authorization', `Bearer ${token}`); // token de autenticación
       expect(response.status).toBe(200);
@@ -28,7 +28,7 @@ describe('Pruebas de rutas de comentarios', () => {
         estado: 'activo',
         tarea_asociada: 1
       };
-      const response = await request(app)
+      const response = await request(router)
         .post('/comentarios')
         .send(comentario)
         .set('Authorization', `Bearer ${token}`); // token de autenticación
@@ -45,7 +45,7 @@ describe('Pruebas de rutas de comentarios', () => {
         estado: 'inactivo',
         tarea_asociada: 2
       };
-      const response = await request(app)
+      const response = await request(router)
         .put(`/comentarios/${id}`)
         .send(comentario)
         .set('Authorization', `Bearer ${token}`); // token de autenticación
@@ -55,7 +55,7 @@ describe('Pruebas de rutas de comentarios', () => {
   
     it('Debería eliminar un comentario existente', async () => {
       const id = 1; // id de un comentario existente
-      const response = await request(app)
+      const response = await request(router)
         .delete(`/comentarios/${id}`)
         .set('Authorization', `Bearer ${token}`); // token de autenticación
       expect(response.status).toBe(200);

@@ -1,9 +1,9 @@
 const request = require('../Back-End/node_modules/supertest');
-const app = require('../Back-End/projectManager');
+const router = require('../Back-End/projectManager');
 
 describe('GET /proyectos', () => {
 	it('responds with a list of projects', (done) => {
-		request(app)
+		request(router)
 			.get('/proyectos')
 			.set('Authorization', 'Bearer <token>')
 			.expect(200)
@@ -18,7 +18,7 @@ describe('GET /proyectos', () => {
 describe('GET /proyectos/:id', () => {
 	it('responds with a specific project', (done) => {
 		const projectId = 1;
-		request(app)
+		request(router)
 			.get(`/proyectos/${projectId}`)
 			.set('Authorization', 'Bearer <token>')
 			.expect(200)
@@ -39,7 +39,7 @@ describe('POST /proyectos', () => {
 			fecha_entrega: '2023-04-30',
 			usuario_asignado: 'Usuario asignado al nuevo proyecto',
 		};
-		request(app)
+		request(router)
 			.post('/proyectos')
 			.set('Authorization', 'Bearer <token>')
 			.send(newProject)
@@ -61,7 +61,7 @@ describe('PUT /proyectos/:id', () => {
 			fecha_entrega: '2023-04-30',
 			usuario_asignado: 'Usuario asignado al proyecto actualizado',
 		};
-		request(app)
+		request(router)
 			.put(`/proyectos/${projectId}`)
 			.set('Authorization', 'Bearer <token>')
 			.send(updatedProject)
@@ -76,7 +76,7 @@ describe('PUT /proyectos/:id', () => {
 describe('DELETE /proyectos/:id', () => {
 	it('deletes an existing project', (done) => {
 		const projectId = 1;
-		request(app)
+		request(router)
 			.delete(`/proyectos/${projectId}`)
 			.set('Authorization', 'Bearer <token>')
 			.expect(200)

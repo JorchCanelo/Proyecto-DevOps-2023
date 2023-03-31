@@ -1,44 +1,32 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
-const session = require('express-session');
+const viewRenderer = require('../App/Presentation/Views/ViewRenderer');
+const router = require('../App/Presentation/Routes/Router');
+
+require('dotenv').config();
 
 const app = express();
 
-const userManager = require('./userManager');
-const taskManager = require('./taskManager');
-const projectManager = require('./projectManager');
-const commentManager = require('./commentManager');
-const historyManager = require('./historyManager');
+app.set('view engine', 'ejs');
+app.set('views', '../App/Presentation/Views');
+app.use(express.static('../Public'));
 
-const puerto = 5000;
+const port = process.env.PORT;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-//Configuración de express ejs
-app.set('view engine', 'ejs');
-app.set('views', '../Front-End');
-app.use(express.static('../Front-End'));
 
-//Redenderización de las vistas
-app.get('/', (req, res) => {
-	res.render('login');
-});
+//Renderización de vistas
+renderViews(app);
 
-app.get('/signin', (req, res) => {
-	res.render('signin');
-});
+//Definición de endpoints
+router(app);
 
-app.get('/entrada', (req, res) => {
-	res.render('entrada');
-});
+app.listen(port, () => console.log(`app listening on http://localhost:${port}`));
 
-app.use(userManager);
-app.use(taskManager);
-app.use(projectManager);
-app.use(commentManager);
-app.use(historyManager);
+function renderViews(app) {
+    app.use('/', viewRenderer);
+    app.use('/signin', viewRenderer);
+    app.use('/entrace', viewRenderer);
+  }
 
-app.listen(puerto, () => console.log(`app listening on http://localhost:${puerto}`));

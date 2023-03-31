@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const connection = require('./dbConnection');
-const auth = require('./auth');
+const connection = require('../../DataAccess/DBConnection');
+const authorizer = require('../../DataAccess/Authorizer');
 
 //Registrar usuario
 router.post('/register', (req, res) => {
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 
             connection.query(dateQuery, () => {
 
-                const token = auth.generarToken(user);
+                const token = authorizer.generarToken(user);
 
                 console.log('Usuario ingresado');
 
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Obtener datos de todos los usuarios
-router.get('/usuarios', auth.verificarToken, (req, res) => {
+router.get('/usuarios', authorizer.verificarToken, (req, res) => {
     connection.query(`SELECT * FROM usuarios`, (error, results) => {
         if (error) {
             res.status(500).json({ error: 'Error al obtener los usuarios' });
@@ -77,7 +77,7 @@ router.get('/usuarios', auth.verificarToken, (req, res) => {
 });
 
 // Obtener usuario por id
-router.get('/usuarios/:id', auth.verificarToken, (req, res) => {
+router.get('/usuarios/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
     connection.query('SELECT * FROM usuarios WHERE id = ?', [id], (error, results) => {
         if (error) {
@@ -91,7 +91,7 @@ router.get('/usuarios/:id', auth.verificarToken, (req, res) => {
 });
 
 // Actualizar datos de usuario
-router.put('/usuarios/:id', auth.verificarToken, (req, res) => {
+router.put('/usuarios/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
     const { username, email, password } = req.body;
     const updatedUser = { username, email, password };
@@ -108,7 +108,7 @@ router.put('/usuarios/:id', auth.verificarToken, (req, res) => {
 });
 
 // Eliminar usuario
-router.delete('/usuarios/:id', auth.verificarToken, (req, res) => {
+router.delete('/usuarios/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
     connection.query('DELETE FROM usuarios WHERE id = ?', [id], (error, result) => {
         if (error) {

@@ -1,5 +1,5 @@
 const request = require('../Back-End/node_modules/supertest');
-const app = require('../Back-End/historyManager');
+const router = require('../Back-End/historyManager');
 
 describe('Historial API', () => {
 	let newHistorialId;
@@ -12,7 +12,7 @@ describe('Historial API', () => {
 			proyecto_asignado: 1
 		};
 
-		const response = await request(app)
+		const response = await request(router)
 			.post('/historial')
 			.send(newHistorial);
 
@@ -24,7 +24,7 @@ describe('Historial API', () => {
 	});
 
 	it('should retrieve a list of historial records', async () => {
-		const response = await request(app)
+		const response = await request(router)
 			.get('/historial')
 			.set('Authorization', 'Bearer validToken');
 
@@ -33,7 +33,7 @@ describe('Historial API', () => {
 	});
 
 	it('should retrieve a single historial record by ID', async () => {
-		const response = await request(app)
+		const response = await request(router)
 			.get(`/historial/${newHistorialId}`)
 			.set('Authorization', 'Bearer validToken');
 
@@ -49,7 +49,7 @@ describe('Historial API', () => {
 			proyecto_asignado: 1
 		};
 
-		const response = await request(app)
+		const response = await request(router)
 			.put(`/historial/${newHistorialId}`)
 			.send(updatedHistorial)
 			.set('Authorization', 'Bearer validToken');
@@ -60,7 +60,7 @@ describe('Historial API', () => {
 	});
 
 	it('should delete a historial record by ID', async () => {
-		const response = await request(app)
+		const response = await request(router)
 			.delete(`/historial/${newHistorialId}`)
 			.set('Authorization', 'Bearer validToken');
 

@@ -1,9 +1,9 @@
 const request = require('../Back-End/node_modules/supertest');
-const app = require('../Back-End/taskManager');
+const router = require('../Back-End/taskManager');
 
 describe('Pruebas de API para Tareas', () => {
     it('Debe obtener todas las tareas', () => {
-      return request(app)
+      return request(router)
         .get('/tareas')
         .expect(200)
         .then((response) => {
@@ -13,7 +13,7 @@ describe('Pruebas de API para Tareas', () => {
     });
   
     it('Debe obtener una tarea específica', () => {
-      return request(app)
+      return request(router)
         .get('/tareas/1')
         .expect(200)
         .then((response) => {
@@ -30,7 +30,7 @@ describe('Pruebas de API para Tareas', () => {
         fecha_entrega: '2023-04-30',
         proyecto_asociado: 'Proyecto 1',
       };
-      return request(app)
+      return request(router)
         .post('/tareas')
         .send(tareaNueva)
         .expect(200)
@@ -47,7 +47,7 @@ describe('Pruebas de API para Tareas', () => {
         fecha_entrega: '2023-05-31',
         proyecto_asociado: 'Proyecto 2',
       };
-      return request(app)
+      return request(router)
         .put('/tareas/1')
         .send(tareaActualizada)
         .expect(200)
@@ -57,7 +57,7 @@ describe('Pruebas de API para Tareas', () => {
     });
   
     it('Debe eliminar una tarea existente', () => {
-      return request(app)
+      return request(router)
         .delete('/tareas/1')
         .expect(200)
         .then((response) => {
