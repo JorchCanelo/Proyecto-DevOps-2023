@@ -8,18 +8,18 @@ const authorizer = require('../../DataAccess/Authorizer');
 router.get('/historial', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM historial', (err, rows, fields) => {
 		if (!err)
-			res.send(rows);
+			res.json({ rows });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
 router.get('/historial/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM historial WHERE proyecto_asignado = ?', [req.params.id], (err, rows, fields) => {
 		if (!err)
-			res.send(rows);
+			res.json({ rows });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
@@ -28,9 +28,9 @@ router.post('/historial', authorizer.verificarToken, (req, res) => {
 	var sql = "INSERT INTO historial (fecha_cambio, detalle_cambio, responsable, proyecto_asignado) VALUES (?, ?, ?, ?)";
 	connection.query(sql, [registro.fecha_cambio, registro.detalle_cambio, registro.responsable, registro.proyecto_asignado], (err, rows, fields) => {
 		if (!err)
-			res.send("Registro de historial agregado exitosamente.");
+			res.json({ message: 'Registro de historial agregado exitosamente.' });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
@@ -39,9 +39,9 @@ router.put('/historial/:id', authorizer.verificarToken, (req, res) => {
 	var sql = "UPDATE historial SET fecha_cambio = ?, detalle_cambio = ?, responsable = ?, proyecto_asignado = ? WHERE id = ?";
 	connection.query(sql, [registro.fecha_cambio, registro.detalle_cambio, registro.responsable, registro.proyecto_asignado, req.params.id], (err, rows, fields) => {
 		if (!err)
-			res.send("Registro de historial actualizado exitosamente.");
+			res.json({ message: 'Registro de historial actualizado exitosamente.' });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
