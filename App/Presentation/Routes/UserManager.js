@@ -13,9 +13,9 @@ router.post('/register', (req, res) => {
 
     connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, createdDate: createdDate }, async (error, results) => {
         if (error) {
-            console.log(error);
+            res.status(500).json({ error });
         } else {
-            console.log('Registro exitoso');
+            res.json({ message: 'Registro exitoso.' });
             return res.redirect('/');
         }
     })
@@ -32,9 +32,7 @@ router.post('/login', async (req, res) => {
 
     connection.query(query, (err, results, fields) => {
         if (err) {
-            console.error(err);
-            res.sendStatus(500);
-            return;
+            return res.status(500).json({ error });
         }
 
         const user = results[0];
