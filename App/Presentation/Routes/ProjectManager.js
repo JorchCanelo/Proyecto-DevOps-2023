@@ -8,18 +8,18 @@ const authorizer = require('../../DataAccess/Authorizer');
 router.get('/proyectos', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM proyectos', (err, rows, fields) => {
 		if (!err)
-			res.send(rows);
+			res.json({ rows });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
 router.get('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM proyectos WHERE id = ?', [req.params.id], (err, rows, fields) => {
 		if (!err)
-			res.send(rows);
+			res.json({ rows });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
@@ -28,9 +28,9 @@ router.post('/proyectos', authorizer.verificarToken, (req, res) => {
 	var sql = "INSERT INTO proyectos (nombre, descripcion, materia, fecha_entrega, usuario_asignado) VALUES (?, ?, ?, ?, ?)";
 	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado], (err, rows, fields) => {
 		if (!err)
-			res.send("Proyecto agregado exitosamente.");
+			res.json({ message: 'Proyecto agregado exitosamente.' });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
@@ -39,18 +39,21 @@ router.put('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 	var sql = "UPDATE proyectos SET nombre = ?, descripcion = ?, materia = ?, fecha_entrega = ?, usuario_asignado = ? WHERE id = ?";
 	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado, req.params.id], (err, rows, fields) => {
 		if (!err)
-			res.send("Proyecto actualizado exitosamente.");
+			res.json({ message: 'Proyecto actualizado exitosamente.' });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
 router.delete('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('DELETE FROM proyectos WHERE id = ?', [req.params.id], (err, rows, fields) => {
-		if (!err)
-			res.send("Proyecto eliminado exitosamente.");
-		else
-			console.log(err);
+		if (error) {
+			res.status(500).json({ error });
+		} else if (results.affectedRows === 0) {
+			res.status(404).json({ message: 'Proyecto no encontrado' });
+		} else {
+			res.json({ message: 'Proyecto eliminado' });
+		}
 	})
 });
 
