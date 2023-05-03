@@ -1,56 +1,59 @@
 const express = require('express');
 const router = express.Router();
-const connection = require('./dbConnection');
-const auth = require('./auth');
+const connection = require('../../DataAccess/DBConnection');
+const authorizer = require('../../DataAccess/Authorizer');
 
 //Proyectos
 
-router.get('/proyectos', auth.verificarToken, (req, res) => {
+router.get('/proyectos', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM proyectos', (err, rows, fields) => {
 		if (!err)
-			res.send(rows);
+			res.json({ rows });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
-router.get('/proyectos/:id', auth.verificarToken, (req, res) => {
+router.get('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM proyectos WHERE id = ?', [req.params.id], (err, rows, fields) => {
 		if (!err)
-			res.send(rows);
+			res.json({ rows });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
-router.post('/proyectos', auth.verificarToken, (req, res) => {
+router.post('/proyectos', authorizer.verificarToken, (req, res) => {
 	let proyecto = req.body;
 	var sql = "INSERT INTO proyectos (nombre, descripcion, materia, fecha_entrega, usuario_asignado) VALUES (?, ?, ?, ?, ?)";
 	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado], (err, rows, fields) => {
 		if (!err)
-			res.send("Proyecto agregado exitosamente.");
+			res.json({ message: 'Proyecto agregado exitosamente.' });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
-router.put('/proyectos/:id', auth.verificarToken, (req, res) => {
+router.put('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 	let proyecto = req.body;
 	var sql = "UPDATE proyectos SET nombre = ?, descripcion = ?, materia = ?, fecha_entrega = ?, usuario_asignado = ? WHERE id = ?";
 	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado, req.params.id], (err, rows, fields) => {
 		if (!err)
-			res.send("Proyecto actualizado exitosamente.");
+			res.json({ message: 'Proyecto actualizado exitosamente.' });
 		else
-			console.log(err);
+			res.status(500).json({ error });
 	})
 });
 
-router.delete('/proyectos/:id', auth.verificarToken, (req, res) => {
+router.delete('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('DELETE FROM proyectos WHERE id = ?', [req.params.id], (err, rows, fields) => {
-		if (!err)
-			res.send("Proyecto eliminado exitosamente.");
-		else
-			console.log(err);
+		if (error) {
+			res.status(500).json({ error });
+		} else if (results.affectedRows === 0) {
+			res.status(404).json({ message: 'Proyecto no encontrado' });
+		} else {
+			res.json({ message: 'Proyecto eliminado' });
+		}
 	})
 });
 

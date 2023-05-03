@@ -4,8 +4,8 @@
   "description": "DevOps",
   "main": "index.js",
   "scripts": {
-    "serve": "nodemon Proyecto/Back-End/index.js",
-    "test": "jest"
+    "serve": "nodemon index.js",
+    "test": "npx jest ./Test/Presentation/Routes"
   },
   "repository": {
     "type": "git",
