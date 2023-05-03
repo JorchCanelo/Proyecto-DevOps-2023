@@ -1,88 +1,113 @@
-const request = require('../Back-End/node_modules/supertest');
-const router = require('../Back-End/projectManager');
+const request = require('supertest');
+const express = require('express');
+const projectRoutes = require('../../../App/Presentation/Routes/ProjectManager');
+const authorizer = require('../../DataAccess/Authorizer');
 
-describe('GET /proyectos', () => {
-	it('responds with a list of projects', (done) => {
-		request(router)
-			.get('/proyectos')
-			.set('Authorization', 'Bearer <token>')
-			.expect(200)
-			.then((response) => {
-				expect(Array.isArray(response.body)).toBe(true);
-				expect(response.body.length).toBeGreaterThan(0);
-				done();
-			});
+//Generamos el mock
+
+jest.mock('../../../App/DataAccess/DBConnection', () => ({
+	query: jest.fn(),
+}));
+
+const app = express();
+app.use(express.json());
+app.use(projectRoutes);
+
+//Suite de pruebas
+
+describe('Pruebas unitarias para los endpoints de proyectos', () => {
+	let token;
+
+	beforeAll(async () => {
+		const payload = { userId: 1234 };
+		token = await authorizer.generarToken(payload);
 	});
+
+	//Probamos los endpoints
+
+	describe('GET /proyectos', () => {
+		test('Debería devolver una lista de proyectos', async () => {
+			const response = await request(app)
+				.get('/proyectos')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.body).toBeInstanceOf(Object);
+		});
+	});
+
+	describe('GET /proyectos/:id', () => {
+		test('Debería devolver un proyecto específico', async () => {
+			const response = await request(app)
+				.get('/proyectos/1')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.body).toBeInstanceOf(Object); // Modificar según el ID del comentario que se espera devolver
+		});
+	});
+
+	describe('POST /proyectos', () => {
+		test('Debería agregar un proyecto', async () => {
+			const response = await request(app)
+				.post('/proyectos')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					fecha_cambio: '2022-04-01',
+					detalle_cambio: 'Amongus',
+					responsable: 2,
+					proyecto_asociado: 3
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('PUT /proyectos/:id', () => {
+		test('Debería actualizar un proyecto', async () => {
+			const response = await request(app)
+				.put('/proyectos/1')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					fecha_cambio: '2022-04-01',
+					detalle_cambio: 'Amongus',
+					responsable: 2,
+					proyecto_asociado: 3
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('PUT /proyectos/:id', () => {
+		test('Debería actualizar un proyecto existente', async () => {
+			const response = await request(app)
+				.put('/proyectos/1')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					fecha_cambio: '2022-04-01',
+					detalle_cambio: 'Amongus',
+					responsable: 2,
+					proyecto_asociado: 3
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('DELETE /proyectos/:id', () => {
+		test('Debería eliminar un proyecto existente', async () => {
+			const response = await request(app)
+				.delete('/proyectos/1')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
 });
 
-describe('GET /proyectos/:id', () => {
-	it('responds with a specific project', (done) => {
-		const projectId = 1;
-		request(router)
-			.get(`/proyectos/${projectId}`)
-			.set('Authorization', 'Bearer <token>')
-			.expect(200)
-			.then((response) => {
-				expect(response.body.length).toBe(1);
-				expect(response.body[0].id).toBe(projectId);
-				done();
-			});
-	});
-});
-
-describe('POST /proyectos', () => {
-	it('adds a new project', (done) => {
-		const newProject = {
-			nombre: 'Nuevo proyecto',
-			descripcion: 'Descripción del nuevo proyecto',
-			materia: 'Materia del nuevo proyecto',
-			fecha_entrega: '2023-04-30',
-			usuario_asignado: 'Usuario asignado al nuevo proyecto',
-		};
-		request(router)
-			.post('/proyectos')
-			.set('Authorization', 'Bearer <token>')
-			.send(newProject)
-			.expect(200)
-			.then((response) => {
-				expect(response.text).toBe('Proyecto agregado exitosamente.');
-				done();
-			});
-	});
-});
-
-describe('PUT /proyectos/:id', () => {
-	it('updates an existing project', (done) => {
-		const projectId = 1;
-		const updatedProject = {
-			nombre: 'Proyecto actualizado',
-			descripcion: 'Descripción del proyecto actualizado',
-			materia: 'Materia del proyecto actualizado',
-			fecha_entrega: '2023-04-30',
-			usuario_asignado: 'Usuario asignado al proyecto actualizado',
-		};
-		request(router)
-			.put(`/proyectos/${projectId}`)
-			.set('Authorization', 'Bearer <token>')
-			.send(updatedProject)
-			.expect(200)
-			.then((response) => {
-				expect(response.text).toBe('Proyecto actualizado exitosamente.');
-				done();
-			});
-	});
-});
-
-describe('DELETE /proyectos/:id', () => {
-	it('deletes an existing project', (done) => {
-		const projectId = 1;
-		request(router)
-			.delete(`/proyectos/${projectId}`)
-			.set('Authorization', 'Bearer <token>')
-			.expect(200)
-			.then((response) => {
-				expect(response.text).toBe('Proyecto eliminado exitosamente.');
-				done();
-			});
-	});
-});

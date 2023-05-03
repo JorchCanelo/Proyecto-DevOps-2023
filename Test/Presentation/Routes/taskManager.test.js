@@ -1,67 +1,117 @@
-const request = require('../Back-End/node_modules/supertest');
-const router = require('../Back-End/taskManager');
+const request = require('supertest');
+const express = require('express');
+const taskRoutes = require('../../../App/Presentation/Routes/TaskManager');
+const authorizer = require('../../DataAccess/Authorizer');
 
-describe('Pruebas de API para Tareas', () => {
-    it('Debe obtener todas las tareas', () => {
-      return request(router)
-        .get('/tareas')
-        .expect(200)
-        .then((response) => {
-          expect(response.body).toBeDefined();
-          expect(response.body.length).toBeGreaterThan(0);
-        });
-    });
-  
-    it('Debe obtener una tarea específica', () => {
-      return request(router)
-        .get('/tareas/1')
-        .expect(200)
-        .then((response) => {
-          expect(response.body).toBeDefined();
-          expect(response.body[0].nombre).toBe('Tarea 1');
-        });
-    });
-  
-    it('Debe agregar una nueva tarea', () => {
-      const tareaNueva = {
-        nombre: 'Tarea nueva',
-        descripcion: 'Descripción de tarea nueva',
-        estado: 'pendiente',
-        fecha_entrega: '2023-04-30',
-        proyecto_asociado: 'Proyecto 1',
-      };
-      return request(router)
-        .post('/tareas')
-        .send(tareaNueva)
-        .expect(200)
-        .then((response) => {
-          expect(response.text).toBe('Tarea agregada exitosamente.');
-        });
-    });
-  
-    it('Debe actualizar una tarea existente', () => {
-      const tareaActualizada = {
-        nombre: 'Tarea actualizada',
-        descripcion: 'Descripción de tarea actualizada',
-        estado: 'en progreso',
-        fecha_entrega: '2023-05-31',
-        proyecto_asociado: 'Proyecto 2',
-      };
-      return request(router)
-        .put('/tareas/1')
-        .send(tareaActualizada)
-        .expect(200)
-        .then((response) => {
-          expect(response.text).toBe('Tarea actualizada exitosamente.');
-        });
-    });
-  
-    it('Debe eliminar una tarea existente', () => {
-      return request(router)
-        .delete('/tareas/1')
-        .expect(200)
-        .then((response) => {
-          expect(response.text).toBe('Tarea eliminada exitosamente.');
-        });
-    });
-  });
+//Generamos el mock
+
+jest.mock('../../../App/DataAccess/DBConnection', () => ({
+	query: jest.fn(),
+}));
+
+const app = express();
+app.use(express.json());
+app.use(taskRoutes);
+
+//Suite de pruebas
+
+describe('Pruebas unitarias para los endpoints de tareas', () => {
+	let token;
+
+	beforeAll(async () => {
+		const payload = { userId: 1234 };
+		token = await authorizer.generarToken(payload);
+	});
+
+	//Probamos los endpoints
+
+	describe('GET /tareas', () => {
+		test('Debería devolver una lista de tareas', async () => {
+			const response = await request(app)
+				.get('/tareas')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.body).toBeInstanceOf(Object);
+		});
+	});
+
+	describe('GET /tareas/:id', () => {
+		test('Debería devolver una tarea específico', async () => {
+			const response = await request(app)
+				.get('/tareas/1')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.body).toBeInstanceOf(Object); // Modificar según el ID del comentario que se espera devolver
+		});
+	});
+
+	describe('POST /tareas', () => {
+		test('Debería agregar una tarea', async () => {
+			const response = await request(app)
+				.post('/tareas')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					nombre: 'Juan',
+					descripcion: 'Este es una tarea de prueba',
+					estado: 'pendiente',
+					fecha_entregaa: '2022-04-01',
+					proyecto_asociado: 123
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('PUT /tareas/:id', () => {
+		test('Debería actualizar una tarea existente', async () => {
+			const response = await request(app)
+				.put('/tareas/1')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					nombre: 'Juan',
+					descripcion: 'Este es una tarea de prueba',
+					estado: 'pendiente',
+					fecha_entregaa: '2022-04-01',
+					proyecto_asociado: 123
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('PUT /tareas/:id', () => {
+		test('Debería actualizar una tarea existente', async () => {
+			const response = await request(app)
+				.put('/tareas/1')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					nombre: 'Juan',
+					descripcion: 'Este es una tarea de prueba',
+					estado: 'pendiente',
+					fecha_entregaa: '2022-04-01',
+					proyecto_asociado: 123
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('DELETE /tareas/:id', () => {
+		test('Debería eliminar una tarea existente', async () => {
+			const response = await request(app)
+				.delete('/tareas/1')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+
+});
+

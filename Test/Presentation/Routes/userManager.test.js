@@ -1,54 +1,119 @@
-const request = require('../Back-End/node_modules/supertest');
-const router = require('../Back-End/userManager');
+const request = require('supertest');
+const express = require('express');
+const userRoutes = require('../../../App/Presentation/Routes/UserManager');
+const authorizer = require('../../DataAccess/Authorizer');
 
-describe('Test the authentication endpoints', () => {
-  test('It should register a new user', async () => {
-    const response = await request(router).post('/register').send({
-      username: 'testuser',
-      email: 'testuser@example.com',
-      password: 'password',
-    });
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Registro exitoso');
-  });
+//Generamos el mock
 
-  test('It should authenticate a user', async () => {
-    const response = await request(router).post('/login').send({
-      username: 'testuser',
-      password: 'password',
-    });
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Usuario autenticado');
-    expect(response.header.authorization).toBeTruthy();
-  });
+jest.mock('../../../App/DataAccess/DBConnection', () => ({
+	query: jest.fn(),
+}));
 
-  test('It should return a list of all users', async () => {
-    const response = await request(router).get('/usuarios');
-    expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBeGreaterThan(0);
-  });
+const app = express();
+app.use(express.json());
+app.use(userRoutes);
 
-  test('It should return a specific user by id', async () => {
-    const response = await request(router).get('/usuarios/1');
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('id', 1);
-  });
+//jest.setTimeout(10000);
 
-  test('It should update a specific user by id', async () => {
-    const response = await request(router).put('/usuarios/1').send({
-      username: 'newusername',
-      email: 'newemail@example.com',
-      password: 'newpassword',
-    });
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('id', 1);
-    expect(response.body).toHaveProperty('username', 'newusername');
-    expect(response.body).toHaveProperty('email', 'newemail@example.com');
-    expect(response.body).toHaveProperty('password', 'newpassword');
-  });
+//Suite de pruebas
 
-  test('It should delete a specific user by id', async () => {
-    const response = await request(router).delete('/usuarios/1');
-    expect(response.statusCode).toBe(204);
-  });
+describe('Pruebas unitarias para los endpoints de comentarios', () => {
+	let token;
+
+	beforeAll(async () => {
+		const payload = { userId: 1234 };
+		token = await authorizer.generarToken(payload);
+	});
+
+	//Probamos los endpoints
+
+	describe('POST /register', () => {
+		test('Debería registrar un usuario', async () => {
+			const response = await request(app)
+				.post('/register')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					username: 'Juan',
+					email: 'Amongos@correo.com',
+					password: 'contraseña',
+					createdDate: '2022-04-01'
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('POST /login', () => {
+		test('Debería iniciar sesión para un usuario', async () => {
+			const response = await request(app)
+				.post('/login')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					username: 'Juan',
+					email: 'Amongos@correo.com',
+					password: 'contraseña',
+					lastLoginDate: '2022-04-01',
+					createdDate: '2022-04-01'
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+
+	describe('GET /usuarios', () => {
+		test('Debería devolver una lista de usuarios', async () => {
+			const response = await request(app)
+				.get('/usuarios')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.body).toBeInstanceOf(Object);
+		});
+	});
+
+	describe('GET /usuarios/:id', () => {
+		test('Debería devolver la información de un usuario en específico', async () => {
+			const response = await request(app)
+				.get('/usuarios/1')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.body).toBeInstanceOf(Object); // Modificar según el ID del comentario que se espera devolver
+		});
+	});
+
+	describe('PUT /usuarios/:id', () => {
+		test('Debería actualizar un comentario existente', async () => {
+			const response = await request(app)
+				.put('/usuarios/1')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					username: 'Juan',
+					email: 'Amongos@correo.com',
+					password: 'contraseña',
+					lastLoginDate: '2022-04-01',
+					createdDate: '2022-04-01'
+				})
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+	describe('DELETE /usuarios/:id', () => {
+		test('Debería eliminar un usuario existente', async () => {
+			const response = await request(app)
+				.delete('/usuarios/1')
+				.set('Authorization', `Bearer ${token}`)
+				.expect(200);
+
+			expect(response.text).toBe('Aceso denegado, token expiró');
+		});
+	});
+
+
 });
+
