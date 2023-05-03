@@ -1,5 +1,5 @@
 function defineRouting(app) {
-    const userManager = require('./UserManager');
+    const userManager = require('./userManager');
     const taskManager = require('./taskManager');
     const projectManager = require('./projectManager');
     const commentManager = require('./commentManager');

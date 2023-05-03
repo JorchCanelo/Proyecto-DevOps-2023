@@ -1,6 +1,6 @@
 const request = require('supertest');
 const express = require('express');
-const commentRoutes = require('../../../App/Presentation/Routes/CommentManager');
+const commentRoutes = require('../../../App/Presentation/Routes/commentManager');
 const authorizer = require('../../DataAccess/Authorizer');
 
 //Generamos el mock

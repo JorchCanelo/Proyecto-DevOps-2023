@@ -1,6 +1,6 @@
 const request = require('supertest');
 const express = require('express');
-const userRoutes = require('../../../App/Presentation/Routes/UserManager');
+const userRoutes = require('../../../App/Presentation/Routes/userManager');
 const authorizer = require('../../DataAccess/Authorizer');
 
 //Generamos el mock
@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(userRoutes);
 
-//jest.setTimeout(10000);
+//jest.setTimeout(20000);
 
 //Suite de pruebas
 
@@ -35,7 +35,8 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 				.send({
 					username: 'Juan',
 					email: 'Amongos@correo.com',
-					password: 'contraseña',
+					password: 'password',
+					lastLoginDate: '2022-04-01',
 					createdDate: '2022-04-01'
 				})
 				.expect(200);
@@ -52,7 +53,7 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 				.send({
 					username: 'Juan',
 					email: 'Amongos@correo.com',
-					password: 'contraseña',
+					password: 'password',
 					lastLoginDate: '2022-04-01',
 					createdDate: '2022-04-01'
 				})

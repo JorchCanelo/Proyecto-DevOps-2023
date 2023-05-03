@@ -1,6 +1,6 @@
 const request = require('supertest');
 const express = require('express');
-const projectRoutes = require('../../../App/Presentation/Routes/ProjectManager');
+const projectRoutes = require('../../../App/Presentation/Routes/projectManager');
 const authorizer = require('../../DataAccess/Authorizer');
 
 //Generamos el mock
