@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "serve": "nodemon index.js",
-    "test": "npx jest ./Test/Presentation/Routes",
-    "start": "node index.js"
+    "test": "npx jest ./Test/Presentation/Routes"
   },
   "repository": {
     "type": "git",

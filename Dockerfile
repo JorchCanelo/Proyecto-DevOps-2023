@@ -1,6 +1,6 @@
 FROM node
 
-WORKDIR /index
+WORKDIR /Proyecto/Back-End/index
 
 COPY package*.json ./
 
