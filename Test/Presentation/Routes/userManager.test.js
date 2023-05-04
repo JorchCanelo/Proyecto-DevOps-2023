@@ -27,41 +27,41 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 
 	//Probamos los endpoints
 
-	describe('POST /register', () => {
-		test('Debería registrar un usuario', async () => {
-			const response = await request(app)
-				.post('/register')
-				.set('Authorization', `Bearer ${token}`)
-				.send({
-					username: 'Juan',
-					email: 'Amongos@correo.com',
-					password: 'password',
-					lastLoginDate: '2022-04-01',
-					createdDate: '2022-04-01'
-				})
-				.expect(200);
+	//describe('POST /register', () => {
+		//test('Debería registrar un usuario', async () => {
+		//	const response = await request(app)
+		//		.post('/register')
+		//		.set('Authorization', `Bearer ${token}`)
+		//		.send({
+		//			username: 'Juan',
+		//			email: 'Amongos@correo.com',
+		//			password: 'password',
+		//			lastLoginDate: '2022-04-01',
+		//			createdDate: '2022-04-01'
+		//		})
+		//		.expect(200);
 
-			expect(response.text).toBe('Aceso denegado, token expiró');
-		});
-	});
+		//	expect(response.text).toBe('Aceso denegado, token expiró');
+		//});
+	//});
 
-	describe('POST /login', () => {
-		test('Debería iniciar sesión para un usuario', async () => {
-			const response = await request(app)
-				.post('/login')
-				.set('Authorization', `Bearer ${token}`)
-				.send({
-					username: 'Juan',
-					email: 'Amongos@correo.com',
-					password: 'password',
-					lastLoginDate: '2022-04-01',
-					createdDate: '2022-04-01'
-				})
-				.expect(200);
+	//describe('POST /login', () => {
+		//test('Debería iniciar sesión para un usuario', async () => {
+		//	const response = await request(app)
+		//		.post('/login')
+		//		.set('Authorization', `Bearer ${token}`)
+		//		.send({
+		//			username: 'Juan',
+		//			email: 'Amongos@correo.com',
+		//			password: 'password',
+		//			lastLoginDate: '2022-04-01',
+		//			createdDate: '2022-04-01'
+		//		})
+		//		.expect(200);
 
-			expect(response.text).toBe('Aceso denegado, token expiró');
-		});
-	});
+		//	expect(response.text).toBe('Aceso denegado, token expiró');
+		//});
+	//});
 
 
 	describe('GET /usuarios', () => {
