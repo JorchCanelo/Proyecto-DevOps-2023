@@ -1,12 +1,10 @@
-FROM node
+FROM node:18
 
-WORKDIR /index
-
-COPY package*.json ./
-
-RUN npm install
+WORKDIR /app
 
 COPY . .
+
+RUN npm install
 
 ENV PORT=8080
 

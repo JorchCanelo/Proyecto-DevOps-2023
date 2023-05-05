@@ -1,0 +1,11 @@
+pipeline {
+agent any
+  stages {
+    stage('Construir y desplegar') {
+        steps {
+        powershell "docker build -f Dockerfile -t sicei-${env.BRANCH_NAME}:1.0.0-${env.BUILD_NUMBER} ."
+        powershell "docker run -p 3000:8080 sicei-${env.BRANCH_NAME}:1.0.0-${env.BUILD_NUMBER}"
+      }
+    }
+  }
+}

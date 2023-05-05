@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const connection = require('../../DataAccess/DBConnection');
-const authorizer = require('../../DataAccess/Authorizer');
+const connection = require('../../DataAccess/databaseConnection');
+const authorizer = require('../../DataAccess/authorizer');
 
 //Registrar usuario
 router.post('/register', (req, res) => {

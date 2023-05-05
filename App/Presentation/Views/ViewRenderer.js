@@ -2,15 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('LogIn');
+  res.render('login');
 });
 
 router.get('/signin', (req, res) => {
-  res.render('SignIn');
+  res.render('signin');
 });
 
 router.get('/entrace', (req, res) => {
-  res.render('Entrace');
+  res.render('entrace');
 });
 
 module.exports = router;

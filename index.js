@@ -1,6 +1,6 @@
 const express = require('express');
 const viewRenderer = require('./App/Presentation/Views/viewRenderer');
-const router = require('./App/Presentation/Routes/Router');
+const router = require('./App/Presentation/Routes/router');
 
 require('dotenv').config();
 
