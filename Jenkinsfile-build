@@ -1,0 +1,26 @@
+pipeline {
+  agent any
+  stages {
+    stage('Clonar repositorio') {
+      steps {
+          git branch: 'Develop', url: 'https://github.com/JorchCanelo/Proyecto-DevOps-2023.git'
+        }
+      }
+    
+    stage('Instalar dependencias') {
+      steps {
+        powershell 'npm install'
+      }
+    }
+    stage('Ejecutar pruebas') {
+      steps {
+        powershell 'npm test -- --forceExit' 
+      }
+    }
+    stage('Ejecutar pipeline de construcción y despliegue') {
+      steps {
+        build 'Proyecto-Final-Devops-Despliegue'
+      }
+    }
+  }
+}
