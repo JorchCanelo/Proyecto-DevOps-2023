@@ -10,17 +10,14 @@ const mysql = require('mysql2');
 // }));
 
 
-//* Conexión a nube de la base de datos
+//* Conexión a nube de la base de datos tipo nodejs
 const connection = mysql.createConnection(process.env.DATABASE_URL);
-console.log('Connected to PlanetScale!');
-//connection.end();
 
-
-connection.connect((error) =>{
-    if(error){
+connection.connect((error) => {
+    if (error) {
         console.error(error);
         return;
-    }else{
+    } else {
         console.log('Conexión existosa');
     }
 });

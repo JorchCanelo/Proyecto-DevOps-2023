@@ -14,6 +14,7 @@ router.post('/register', (req, res) => {
 
     connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
         if (error) {
+            console.log(error);
             res.status(500).json({ error });
         } else {
             res.json({ message: 'Registro exitoso.' });
@@ -30,8 +31,8 @@ router.post('/login', async (req, res) => {
     const loginDate = date.toLocaleString();
     const dateQuery = `UPDATE usuarios SET lastLoginDate = '${loginDate}' WHERE username = '${username}'`;
 
-    connection.query(query, (err, results, fields) => {
-        if (err) {
+    connection.query(query, (error, results, fields) => {
+        if (error) {
             return res.status(500).json({ error });
         }
 
