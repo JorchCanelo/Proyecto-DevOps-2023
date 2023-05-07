@@ -17,6 +17,11 @@ pipeline {
         powershell 'npm test -- --forceExit' 
       }
     }
+    stage('Detener contenedores'){
+      steps{
+        powershell 'docker stop $(docker ps -aq)'
+      }
+    }
     stage('Ejecutar pipeline de construcción y despliegue') {
       steps {
         build 'Proyecto-Final-Devops-Despliegue'

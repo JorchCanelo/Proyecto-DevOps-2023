@@ -11,7 +11,7 @@ const mysql = require('mysql2');
 
 
 //* Conexión a nube de la base de datos tipo nodejs
-const connection = mysql.createConnection(process.env.DATABASE_URL);
+ const connection = mysql.createConnection(process.env.DATABASE_URL);
 
 connection.connect((error) => {
     if (error) {
