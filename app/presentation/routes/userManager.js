@@ -10,13 +10,13 @@ router.post('/register', (req, res) => {
     const password = req.body.password;
     const date = new Date();
     const createdDate = date.toLocaleString();
+    const lastLoginDate = 'Default';
 
-    connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, createdDate: createdDate }, async (error, results) => {
+    connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
         if (error) {
             res.status(500).json({ error });
         } else {
             res.json({ message: 'Registro exitoso.' });
-            return res.redirect('/');
         }
     })
 

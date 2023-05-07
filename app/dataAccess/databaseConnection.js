@@ -13,7 +13,7 @@ const mysql = require('mysql2');
 //* Conexión a nube de la base de datos
 const connection = mysql.createConnection(process.env.DATABASE_URL);
 console.log('Connected to PlanetScale!');
-connection.end();
+//connection.end();
 
 
 connection.connect((error) =>{
