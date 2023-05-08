@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const logger = require('../../dataAccess/logger');
 const connection = require('../../dataAccess/databaseConnection');
 const authorizer = require('../../dataAccess/authorizer');
 
@@ -14,9 +15,10 @@ router.post('/register', (req, res) => {
 
     connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
         if (error) {
-            console.log(error);
+            logger.error(`Error al registrar usuario: ${error.message}`);
             res.status(500).json({ error });
         } else {
+            logger.info(`Usuario registrado correctamente: ${username}`);
             res.json({ message: 'Registro exitoso.' });
         }
     })
@@ -33,6 +35,7 @@ router.post('/login', async (req, res) => {
 
     connection.query(query, (error, results, fields) => {
         if (error) {
+            logger.error(`Error al iniciar sesión: ${error.message}`);
             return res.status(500).json({ error });
         }
 
@@ -48,7 +51,7 @@ router.post('/login', async (req, res) => {
 
                 const token = authorizer.generarToken(user);
 
-                console.log('Usuario ingresado');
+                logger.info(`Usuario ha iniciado sesión correctamente: ${username}`);
 
                 res.header('authorization', token).json({
                     message: 'Usuario atenticado',
