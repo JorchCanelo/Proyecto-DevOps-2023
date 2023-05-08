@@ -13,11 +13,11 @@ router.post('/register', (req, res) => {
     const createdDate = date.toLocaleString();
     const lastLoginDate = 'Default';
 
-        // Loggear llamada de la API en INFO
-        logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    // Loggear llamada de la API en INFO
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
 
-        // Loggear body de la llamada en DEBUG
-        debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    // Loggear body de la llamada en DEBUG
+    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
         if (error) {
@@ -44,31 +44,41 @@ router.post('/login', async (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query(query, (error, results, fields) => {
-        if (error) {
-            return res.status(500).json({ error });
-        }
+        try {
+            if (error) {
+                logger.error(error.stack || error);
+                if(error.code === 'ER_DUP_ENTRY'){
+                    debug.warn(`Error de validacion: El usuario con email ${obfuscateSensitiveData(email)} no existe.`);
+                    res.status(400).json({ error: `El usuario con email ${email} no existe.` });
+                }
+                return res.status(500).json({ error });
+            }
 
-        const user = results[0];
+            const user = results[0];
 
-        if (!user) {
-            return res.status(401).json({ mensaje: "Credenciales inválidas" });
-        }
+            if (!user) {
+                return res.status(401).json({ mensaje: "Credenciales inválidas" });
+            }
 
-        if (user.password == password) {
+            if (user.password == password) {
 
-            connection.query(dateQuery, () => {
+                connection.query(dateQuery, () => {
 
-                const token = authorizer.generarToken(user);
+                    const token = authorizer.generarToken(user);
 
-                res.header('authorization', token).json({
-                    message: 'Usuario atenticado',
-                    token: token,
+                    res.header('authorization', token).json({
+                        message: 'Usuario atenticado',
+                        token: token,
+                    });
+
                 });
 
-            });
-
-        } else {
-            return res.status(401).json({ mensaje: "Credenciales inválidas" });
+            } else {
+                return res.status(401).json({ mensaje: "Credenciales inválidas" });
+            }
+        } catch (catchError) {
+            logger.error(catchError.stack || catchError);
+            res.status(500).json({ error: catchError });
         }
     });
 
