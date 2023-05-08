@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const logger = require('../../dataAccess/logger');
 const connection = require('../../dataAccess/databaseConnection');
 const authorizer = require('../../dataAccess/authorizer');
+const { logger, debug, obfuscateSensitiveData } = require('../../dataAccess/logger');
 
 //Registrar usuario
 router.post('/register', (req, res) => {
@@ -13,12 +13,16 @@ router.post('/register', (req, res) => {
     const createdDate = date.toLocaleString();
     const lastLoginDate = 'Default';
 
+        // Loggear llamada de la API en INFO
+        logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+
+        // Loggear body de la llamada en DEBUG
+        debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+
     connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
         if (error) {
-            logger.error(`Error al registrar usuario: ${error.message}`);
             res.status(500).json({ error });
         } else {
-            logger.info(`Usuario registrado correctamente: ${username}`);
             res.json({ message: 'Registro exitoso.' });
         }
     })
@@ -33,9 +37,14 @@ router.post('/login', async (req, res) => {
     const loginDate = date.toLocaleString();
     const dateQuery = `UPDATE usuarios SET lastLoginDate = '${loginDate}' WHERE username = '${username}'`;
 
+    // Loggear llamada de la API en INFO
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+
+    // Loggear body de la llamada en DEBUG
+    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+
     connection.query(query, (error, results, fields) => {
         if (error) {
-            logger.error(`Error al iniciar sesión: ${error.message}`);
             return res.status(500).json({ error });
         }
 
@@ -50,8 +59,6 @@ router.post('/login', async (req, res) => {
             connection.query(dateQuery, () => {
 
                 const token = authorizer.generarToken(user);
-
-                logger.info(`Usuario ha iniciado sesión correctamente: ${username}`);
 
                 res.header('authorization', token).json({
                     message: 'Usuario atenticado',
