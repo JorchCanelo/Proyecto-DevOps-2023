@@ -20,11 +20,19 @@ router.post('/register', (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
-        if (error) {
-            res.status(500).json({ error });
-        } else {
-            res.json({ message: 'Registro exitoso.' });
+        
+        try{
+            if(error.code === 'ER_DUP_ENTRY'){
+                debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(email)} no es válida`);
+                res.status(400).json({ error: `${email} no válido.` });
+            }else{
+                res.json('Registro exitoso.')
+            }
+        }catch (catchError){
+            logger.error(catchError.stack || catchError);
+            res.status(500).json({ error: catchError });
         }
+
     })
 
 });
@@ -57,6 +65,7 @@ router.post('/login', async (req, res) => {
             const user = results[0];
 
             if (!user) {
+                debug.warn(`Error de validacion: El usuario con email ${obfuscateSensitiveData(email)} no existe.`);
                 return res.status(401).json({ mensaje: "Credenciales inválidas" });
             }
 
