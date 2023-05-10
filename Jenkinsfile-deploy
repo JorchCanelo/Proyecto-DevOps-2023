@@ -4,7 +4,7 @@ agent any
     stage('Construir y desplegar') {
         steps {
         powershell "docker build -f Dockerfile -t sicei-${env.BRANCH_NAME}:1.0.0-${env.BUILD_NUMBER} ."
-        powershell "docker run -p 5000:5000 -d --network='host' sicei-${env.BRANCH_NAME}:1.0.0-${env.BUILD_NUMBER}"
+        powershell "docker run -p 5000:5000 -d --net=host sicei-${env.BRANCH_NAME}:1.0.0-${env.BUILD_NUMBER}"
       }
     }
   }
