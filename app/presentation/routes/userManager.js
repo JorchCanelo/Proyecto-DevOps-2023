@@ -22,11 +22,11 @@ router.post('/register', (req, res) => {
     connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
 
         try {
-            if (error.code === 'ER_DUP_ENTRY') {
+            if (error) {
                 debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(email)} no es válida`);
                 res.status(400).json({ error: `${email} no válido.` });
             } else {
-                res.json('Registro exitoso.')
+                res.json('Registro exitoso.');
             }
         } catch (catchError) {
             logger.error(catchError.stack || catchError);
