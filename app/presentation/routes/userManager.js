@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
     connection.query(query, (error, results, fields) => {
         try {
             if (error) {     
-                if (error.code === 'ER_DUP_ENTRY') {
+                if (error) {
                     debug.warn(`Error de validacion: El usuario con email ${obfuscateSensitiveData(email)} no existe.`);
                     res.status(400).json({ error: `El usuario con email ${email} no existe.` });
                 }
