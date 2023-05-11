@@ -92,9 +92,9 @@ router.post('/historial', authorizer.verificarToken, (req, res) => {
 
 	connection.query(sql, { fecha_cambio: registro.fecha_cambio, detalle_cambio: registro.detalle_cambio, responsable: registro.responsable, proyecto_asignado: registro.proyecto_asignado}, async (error, results) => {
 	   try {
-            if (error.code === 'ER_DUP_ENTRY') {
-                debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(registro.proyecto_asignado)} no es válida`);
-                res.status(400).json({ error: `${registro.proyecto_asignado} no válido.` });
+            if (error) {
+                debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(registro.detalle_cambio)} no es válida`);
+                res.status(400).json({ error: `${registro.detalle_cambio} no válido.` });
             } else {
                 res.json('Registro exitoso.')
             }

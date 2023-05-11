@@ -91,7 +91,7 @@ router.post('/proyectos', authorizer.verificarToken, (req, res) => {
 
    connection.query(sql, { nombre: proyecto.nombre, descripcion: proyecto.descripcion, materia: proyecto.materia, fecha_entrega: proyecto.fecha_entrega, usuario_asignado: proyecto.usuario_asignado}, async (error, results) => {
 	  try {
-		   if (error.code === 'ER_DUP_ENTRY') {
+		   if (error) {
 			   debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(proyecto.nombre)} no es válida`);
 			   res.status(400).json({ error: `${proyecto.nombre} no válido.` });
 		   } else {
