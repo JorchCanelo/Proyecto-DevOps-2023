@@ -19,7 +19,7 @@ router.post('/register', (req, res) => {
     // Loggear body de la llamada en DEBUG
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
-    connection.query('INSERT INTO usuarios SET ?', { username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
+    connection.query('INSERT INTO usuarios SET ?', {username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
 
         try {
             if (error) {
