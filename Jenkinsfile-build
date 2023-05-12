@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Desplegar') {
       steps {
-        build job: 'Proyecto-Final-Devops-Despliegue', propagate: true
+        build job: 'Proyecto-Final-Devops-Despliegue', propagate: false
       }
     }
   }
