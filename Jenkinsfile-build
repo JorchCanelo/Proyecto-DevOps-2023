@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+  agent {label 'devops'}
   stages {
     stage('Clonar repositorio') {
       steps {
@@ -22,10 +22,9 @@ pipeline {
         powershell 'docker stop $(docker ps -aq)'
       }
     }
-    stage('Ejecutar pipeline de construcción y despliegue') {
-      steps {
-        build 'Proyecto-Final-Devops-Despliegue'
-      }
-    }
   }
+}
+pipeline{
+
+
 }
