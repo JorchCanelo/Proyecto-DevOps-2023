@@ -5,8 +5,7 @@ pipeline {
       steps {
           git branch: 'Develop', url: 'https://github.com/JorchCanelo/Proyecto-DevOps-2023.git'
         }
-      }
-    
+      }   
     stage('Instalar dependencias') {
       steps {
         powershell 'npm install'
@@ -22,9 +21,10 @@ pipeline {
         powershell 'docker stop $(docker ps -aq)'
       }
     }
+    stage('Desplegar') {
+      steps {
+        build job: 'Proyecto-Final-Devops-Despliegue/Jenkinsfile-deploy', propagate: true
+      }
+    }
   }
-}
-pipeline{
-
-
 }

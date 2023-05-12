@@ -1,10 +1,10 @@
 pipeline {
-agent any
+  agent any
   stages {
     stage('Construir y desplegar') {
         steps {
-        powershell "docker build -f Dockerfile -t sicei-${env.BRANCH_NAME}:1.0.0-${env.BUILD_NUMBER} ."
-        powershell "docker run -p 5000:5000 -d sicei-${env.BRANCH_NAME}:1.0.0-${env.BUILD_NUMBER}"
+        powershell "docker build -f Dockerfile -t sicei-${env.GIT_BRANCH}:1.0.0-${env.BUILD_NUMBER} ."
+        powershell "docker run -p 5000:5000 -d sicei-${env.GIT_BRANCH}:1.0.0-${env.BUILD_NUMBER}"
       }
     }
   }
