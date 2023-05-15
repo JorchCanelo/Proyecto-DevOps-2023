@@ -4,9 +4,9 @@ const connection = require('../../dataAccess/databaseConnection');
 const authorizer = require('../../dataAccess/authorizer');
 const { logger, debug, obfuscateSensitiveData } = require('../../dataAccess/logger');
 
-//Comentarios
+//comments
 
-router.get('/comentarios', authorizer.verificarToken, (req, res) => {
+router.get('/comments/getAll', authorizer.verificarToken, (req, res) => {
 
 
     // Loggear llamada de la API en INFO
@@ -30,7 +30,7 @@ router.get('/comentarios', authorizer.verificarToken, (req, res) => {
     });
 });
 
-router.get('/comentarios/:id', authorizer.verificarToken, (req, res) => {
+router.get('/comments/getComment/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO
@@ -57,7 +57,7 @@ router.get('/comentarios/:id', authorizer.verificarToken, (req, res) => {
     });
 });
 
-router.post('/comentarios', authorizer.verificarToken, (req, res) => {
+router.post('/comments/addComment', authorizer.verificarToken, (req, res) => {
     let comentario = req.body;
     var sql = "INSERT INTO comentarios SET ?";
 
@@ -83,7 +83,7 @@ router.post('/comentarios', authorizer.verificarToken, (req, res) => {
 
 });
 
-router.put('/comentarios/:id', authorizer.verificarToken, (req, res) => {
+router.put('/comments/update/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
     var sql = "UPDATE comentarios SET ? WHERE id = ?";
     const { autor, contenido, fecha, estado, tarea_asociada } = req.body;
@@ -115,7 +115,7 @@ router.put('/comentarios/:id', authorizer.verificarToken, (req, res) => {
         });
 });
 
-router.delete('/comentarios/:id', authorizer.verificarToken, (req, res) => {
+router.delete('/comments/delete/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO

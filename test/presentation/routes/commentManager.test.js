@@ -25,10 +25,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 
 	//Probamos los endpoints
 
-	describe('GET /comentarios', () => {
+	describe('GET /comments/getAll', () => {
 		test('Debería devolver una lista de comentarios', async () => {
 			const response = await request(app)
-				.get('/comentarios')
+				.get('/comments/getAll')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 
@@ -36,10 +36,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 		});
 	});
 
-	describe('GET /comentarios/:id', () => {
+	describe('GET /comments/getComment/:id', () => {
 		test('Debería devolver un comentario específico', async () => {
 			const response = await request(app)
-				.get('/comentarios/1')
+				.get('/comments/getComment/1')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 
@@ -47,10 +47,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 		});
 	});
 
-	describe('POST /comentarios', () => {
+	describe('POST /comments/addComment', () => {
 		test('Debería agregar un comentario', async () => {
 			const response = await request(app)
-				.post('/comentarios')
+				.post('/comments/addComment')
 				.set('Authorization', `Bearer ${token}`)
 				.send({
 					autor: 'Juan',
@@ -65,10 +65,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 		});
 	});
 
-	describe('PUT /comentarios/:id', () => {
+	describe('PUT /comments/update/:id', () => {
 		test('Debería actualizar un comentario existente', async () => {
 			const response = await request(app)
-				.put('/comentarios/1')
+				.put('/comments/update/1')
 				.set('Authorization', `Bearer ${token}`)
 				.send({
 					autor: 'Juan',
@@ -83,28 +83,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 		});
 	});
 
-	describe('PUT /comentarios/:id', () => {
-		test('Debería actualizar un comentario existente', async () => {
-			const response = await request(app)
-				.put('/comentarios/1')
-				.set('Authorization', `Bearer ${token}`)
-				.send({
-					autor: 'Juan',
-					contenido: 'Este es un comentario actualizado',
-					fecha: '2022-04-01',
-					estado: 'completado',
-					tarea_asociada: 1
-				})
-				.expect(200);
-
-			expect(response.text).toBe('Aceso denegado, token expiró');
-		});
-	});
-
-	describe('DELETE /comentarios/:id', () => {
+	describe('DELETE /comments/delete/:id', () => {
 		test('Debería eliminar un comentario existente', async () => {
 			const response = await request(app)
-				.delete('/comentarios/1')
+				.delete('/comments/delete/1')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 

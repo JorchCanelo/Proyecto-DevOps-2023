@@ -4,9 +4,9 @@ const connection = require('../../dataAccess/databaseConnection');
 const authorizer = require('../../dataAccess/authorizer');
 const { logger, debug, obfuscateSensitiveData } = require('../../dataAccess/logger');
 
-//historial
+//history
 
-router.get('/historial', authorizer.verificarToken, (req, res) => {
+router.get('/history/getAll', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM historial', (error, rows, fields) => {
 		if (!error)
 			res.json({ rows });
@@ -36,7 +36,7 @@ router.get('/historial', authorizer.verificarToken, (req, res) => {
 
 
 
-router.get('/historial/:id', authorizer.verificarToken, (req, res) => {
+router.get('/history/getHistory/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM historial WHERE proyecto_asignado = ?', [req.params.id], (error, rows, fields) => {
 		if (!error)
 			res.json({ rows });
@@ -72,7 +72,7 @@ router.get('/historial/:id', authorizer.verificarToken, (req, res) => {
 	});
 });
 
-router.post('/historial', authorizer.verificarToken, (req, res) => {
+router.post('/history/addHistory', authorizer.verificarToken, (req, res) => {
 	let registro = req.body;
 	var sql = "INSERT INTO historial (fecha_cambio, detalle_cambio, responsable, proyecto_asignado) VALUES (?, ?, ?, ?)";
 	connection.query(sql, [registro.fecha_cambio, registro.detalle_cambio, registro.responsable, registro.proyecto_asignado], (error, rows, fields) => {
@@ -107,7 +107,7 @@ router.post('/historial', authorizer.verificarToken, (req, res) => {
 });
 
 
-router.put('/historial/:id', authorizer.verificarToken, (req, res) => {
+router.put('/history/update/:id', authorizer.verificarToken, (req, res) => {
 	let registro = req.body;
 	var sql = "UPDATE historial SET fecha_cambio = ?, detalle_cambio = ?, responsable = ?, proyecto_asignado = ? WHERE id = ?";
 	connection.query(sql, [registro.fecha_cambio, registro.detalle_cambio, registro.responsable, registro.proyecto_asignado, req.params.id], (err, rows, fields) => {
@@ -149,7 +149,7 @@ router.put('/historial/:id', authorizer.verificarToken, (req, res) => {
 
 
 
-router.delete('/historial/:id', authorizer.verificarToken, (req, res) => {
+router.delete('/history/delete/:id', authorizer.verificarToken, (req, res) => {
 	const id = req.params.id;
 	connection.query('DELETE FROM historial WHERE id = ?', id, (error, results) => {
 		if (error) {

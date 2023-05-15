@@ -94,7 +94,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Obtener datos de todos los usuarios
-router.get('/usuarios', authorizer.verificarToken, (req, res) => {
+router.get('/users/getAll', authorizer.verificarToken, (req, res) => {
 
     // Loggear llamada de la API en INFO
     logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
@@ -118,7 +118,7 @@ router.get('/usuarios', authorizer.verificarToken, (req, res) => {
 });
 
 // Obtener usuario por id
-router.get('/usuarios/:id', authorizer.verificarToken, (req, res) => {
+router.get('/users/getUser/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO
@@ -147,7 +147,7 @@ router.get('/usuarios/:id', authorizer.verificarToken, (req, res) => {
 });
 
 // Actualizar datos de usuario
-router.put('/usuarios/:id', authorizer.verificarToken, (req, res) => {
+router.put('/users/update/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
     const { username, email, password } = req.body;
     const updatedUser = { username, email, password };
@@ -178,7 +178,7 @@ router.put('/usuarios/:id', authorizer.verificarToken, (req, res) => {
 });
 
 // Eliminar usuario
-router.delete('/usuarios/:id', authorizer.verificarToken, (req, res) => {
+router.delete('/users/delete/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO

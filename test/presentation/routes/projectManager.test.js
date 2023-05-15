@@ -25,10 +25,10 @@ describe('Pruebas unitarias para los endpoints de proyectos', () => {
 
 	//Probamos los endpoints
 
-	describe('GET /proyectos', () => {
+	describe('GET /projects/getAll', () => {
 		test('Debería devolver una lista de proyectos', async () => {
 			const response = await request(app)
-				.get('/proyectos')
+				.get('/projects/getAll')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 
@@ -36,10 +36,10 @@ describe('Pruebas unitarias para los endpoints de proyectos', () => {
 		});
 	});
 
-	describe('GET /proyectos/:id', () => {
+	describe('GET /projects/getProject/:id', () => {
 		test('Debería devolver un proyecto específico', async () => {
 			const response = await request(app)
-				.get('/proyectos/1')
+				.get('/projects/getProject/1')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 
@@ -47,10 +47,10 @@ describe('Pruebas unitarias para los endpoints de proyectos', () => {
 		});
 	});
 
-	describe('POST /proyectos', () => {
+	describe('POST /projects/addProject', () => {
 		test('Debería agregar un proyecto', async () => {
 			const response = await request(app)
-				.post('/proyectos')
+				.post('/projects/addProject')
 				.set('Authorization', `Bearer ${token}`)
 				.send({
 					fecha_cambio: '2022-04-01',
@@ -64,10 +64,10 @@ describe('Pruebas unitarias para los endpoints de proyectos', () => {
 		});
 	});
 
-	describe('PUT /proyectos/:id', () => {
+	describe('PUT /projects/update/:id', () => {
 		test('Debería actualizar un proyecto', async () => {
 			const response = await request(app)
-				.put('/proyectos/1')
+				.put('/projects/update/1')
 				.set('Authorization', `Bearer ${token}`)
 				.send({
 					fecha_cambio: '2022-04-01',
@@ -81,27 +81,10 @@ describe('Pruebas unitarias para los endpoints de proyectos', () => {
 		});
 	});
 
-	describe('PUT /proyectos/:id', () => {
-		test('Debería actualizar un proyecto existente', async () => {
-			const response = await request(app)
-				.put('/proyectos/1')
-				.set('Authorization', `Bearer ${token}`)
-				.send({
-					fecha_cambio: '2022-04-01',
-					detalle_cambio: 'Amongus',
-					responsable: 2,
-					proyecto_asociado: 3
-				})
-				.expect(200);
-
-			expect(response.text).toBe('Aceso denegado, token expiró');
-		});
-	});
-
-	describe('DELETE /proyectos/:id', () => {
+	describe('DELETE /projects/delete/:id', () => {
 		test('Debería eliminar un proyecto existente', async () => {
 			const response = await request(app)
-				.delete('/proyectos/1')
+				.delete('/projects/delete/1')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 

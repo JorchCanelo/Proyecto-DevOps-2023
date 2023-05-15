@@ -4,9 +4,9 @@ const connection = require('../../dataAccess/databaseConnection');
 const authorizer = require('../../dataAccess/authorizer');
 const { logger, debug, obfuscateSensitiveData } = require('../../dataAccess/logger');
 
-//Tareas
+//tasks
 
-router.get('/tareas', authorizer.verificarToken, (req, res) => {
+router.get('/tasks/getAll', authorizer.verificarToken, (req, res) => {
 
     // Loggear llamada de la API en INFO
     logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
@@ -29,7 +29,7 @@ router.get('/tareas', authorizer.verificarToken, (req, res) => {
     });
 });
 
-router.get('/tareas/:id', authorizer.verificarToken, (req, res) => {
+router.get('/tasks/getTask/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO
@@ -58,7 +58,7 @@ router.get('/tareas/:id', authorizer.verificarToken, (req, res) => {
 });
 
 
-router.post('/tareas', authorizer.verificarToken, (req, res) => {
+router.post('/tasks/addTask', authorizer.verificarToken, (req, res) => {
     const tarea = req.body;
     var sql = "INSERT INTO tareas SET ?";
 
@@ -85,7 +85,7 @@ router.post('/tareas', authorizer.verificarToken, (req, res) => {
 
 });
 
-router.put('/tareas/:id', authorizer.verificarToken, (req, res) => {
+router.put('/tasks/update/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
     var sql = "UPDATE usuarios SET ? WHERE id = ?";
     const { nombre, descripcion, estado, fecha_entrega, proyecto_asociado } = req.body;
@@ -117,7 +117,7 @@ router.put('/tareas/:id', authorizer.verificarToken, (req, res) => {
 });
 
 
-router.delete('/tareas/:id', authorizer.verificarToken, (req, res) => {
+router.delete('/tasks/delete/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO

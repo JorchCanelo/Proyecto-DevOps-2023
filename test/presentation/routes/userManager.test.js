@@ -64,10 +64,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 	//});
 
 
-	describe('GET /usuarios', () => {
+	describe('GET /users/getAll', () => {
 		test('Debería devolver una lista de usuarios', async () => {
 			const response = await request(app)
-				.get('/usuarios')
+				.get('/users/getAll')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 
@@ -75,10 +75,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 		});
 	});
 
-	describe('GET /usuarios/:id', () => {
+	describe('GET /users/getUser/:id', () => {
 		test('Debería devolver la información de un usuario en específico', async () => {
 			const response = await request(app)
-				.get('/usuarios/1')
+				.get('/users/getUser/1')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 
@@ -86,10 +86,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 		});
 	});
 
-	describe('PUT /usuarios/:id', () => {
+	describe('PUT /users/update/:id', () => {
 		test('Debería actualizar un comentario existente', async () => {
 			const response = await request(app)
-				.put('/usuarios/1')
+				.put('/users/update/1')
 				.set('Authorization', `Bearer ${token}`)
 				.send({
 					username: 'Juan',
@@ -104,10 +104,10 @@ describe('Pruebas unitarias para los endpoints de comentarios', () => {
 		});
 	});
 
-	describe('DELETE /usuarios/:id', () => {
+	describe('DELETE /users/delete/:id', () => {
 		test('Debería eliminar un usuario existente', async () => {
 			const response = await request(app)
-				.delete('/usuarios/1')
+				.delete('/users/delete/1')
 				.set('Authorization', `Bearer ${token}`)
 				.expect(200);
 

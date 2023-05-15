@@ -3,9 +3,9 @@ const router = express.Router();
 const connection = require('../../dataAccess/databaseConnection');
 const authorizer = require('../../dataAccess/authorizer');
 
-//Proyectos
+//projects
 
-router.get('/proyectos', authorizer.verificarToken, (req, res) => {
+router.get('/projects/getAll', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM proyectos', (err, rows, fields) => {
 		if (!err)
 			res.json({ rows });
@@ -34,7 +34,7 @@ router.get('/proyectos', authorizer.verificarToken, (req, res) => {
 	});
 });
 
-router.get('/proyectos/:id', authorizer.verificarToken, (req, res) => {
+router.get('/projects/getProject/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('SELECT * FROM proyectos WHERE id = ?', [req.params.id], (err, rows, fields) => {
 		if (!err)
 			res.json({ rows });
@@ -70,7 +70,7 @@ router.get('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 
 });
 
-router.post('/proyectos', authorizer.verificarToken, (req, res) => {
+router.post('/projects/addProject', authorizer.verificarToken, (req, res) => {
 	let proyecto = req.body;
 	var sql = "INSERT INTO proyectos (nombre, descripcion, materia, fecha_entrega, usuario_asignado) VALUES (?, ?, ?, ?, ?)";
 	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado], (error, rows, fields) => {
@@ -105,7 +105,7 @@ router.post('/proyectos', authorizer.verificarToken, (req, res) => {
 
 });
 
-router.put('/proyectos/:id', authorizer.verificarToken, (req, res) => {
+router.put('/projects/update/:id', authorizer.verificarToken, (req, res) => {
 	let proyecto = req.body;
 	var sql = "UPDATE proyectos SET nombre = ?, descripcion = ?, materia = ?, fecha_entrega = ?, usuario_asignado = ? WHERE id = ?";
 	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado, req.params.id], (err, rows, fields) => {
@@ -146,7 +146,7 @@ router.put('/proyectos/:id', authorizer.verificarToken, (req, res) => {
 
 });
 
-router.delete('/proyectos/:id', authorizer.verificarToken, (req, res) => {
+router.delete('/projects/delete/:id', authorizer.verificarToken, (req, res) => {
 	connection.query('DELETE FROM proyectos WHERE id = ?', [req.params.id], (error, rows, fields) => {
 		if (error) {
 			res.status(500).json({ error });
