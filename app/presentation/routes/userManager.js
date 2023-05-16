@@ -20,7 +20,6 @@ router.post('/register', (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('INSERT INTO usuarios SET ?', {username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
-
         try {
             if (error) {
                 debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(email)} no es válida`);
@@ -55,8 +54,8 @@ router.post('/login', async (req, res) => {
         try {
             if (error) {     
                 if (error) {
-                    debug.warn(`Error de validacion: El usuario con email ${obfuscateSensitiveData(email)} no existe.`);
-                    res.status(400).json({ error: `El usuario con email ${email} no existe.` });
+                    debug.warn(`Error de validacion: El usuario  ${username} no existe.`);
+                    res.status(400).json({ error: `El usuario ${username} no existe.` });
                 }
                 logger.error(error.stack || error);
                 return res.status(500).json({ error });
@@ -65,7 +64,7 @@ router.post('/login', async (req, res) => {
             const user = results[0];
 
             if (!user) {
-                debug.warn(`Error de validacion: El usuario con email ${obfuscateSensitiveData(email)} no existe.`);
+                debug.warn(`Error de validacion: El usuario ${username} no existe.`);
                 return res.status(401).json({ mensaje: "Credenciales inválidas" });
             }
 
