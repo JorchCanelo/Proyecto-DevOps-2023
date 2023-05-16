@@ -8,9 +8,17 @@ function generarToken(usuario) {
         password: usuario.password
     };
 
-    process.env.SECRET_KEY = generateString(30);
+    const secretKey = generateString(30);
+    const token = jwt.sign(payload, secretKey, { expiresIn: '10h' });
 
-    return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1h' });
+    responseToken = {
+        secretKey: secretKey,
+        token: token,
+    }
+
+
+
+    return responseToken;
 
 }
 
@@ -18,13 +26,16 @@ function generarToken(usuario) {
 function verificarToken(req, res, next) {
     try {
 
-        const accessToken = req.headers['authorization'] || req.query.accesToken;
+        const accessToken = req.headers['authorization'] || req.query.accessToken;
+
+        const secretKey = req.query.secretKey;
+
 
         if (!accessToken) {
             res.send('Acceso denegado');
         }
 
-        jwt.verify(accessToken, process.env.SECRET_KEY, (err, user) => {
+        jwt.verify(accessToken, secretKey, (err, user) => {
 
             if (err) {
                 res.send('Aceso denegado, token expiró');
