@@ -16,13 +16,11 @@ pipeline {
         powershell 'npm test -- --forceExit' 
       }
     }
-    stage('Detener contenedores'){
-      steps {
-        //powershell 'docker stop $(docker ps -q --filter "publish=5000")'
-        powershell -Command "$containerIds = (docker ps -q --filter 'publish=5000'); if ([string]::IsNullOrEmpty($containerIds)) { Write-Host 'No hay contenedores en ejecución en el puerto 5000.' } else { docker stop $containerIds }"
-
-      }
-    }
+    // stage('Detener contenedores'){
+    //   steps {
+    //     powershell 'docker stop $(docker ps -q --filter "publish=5000")'
+    //   }
+    // }
     stage('Desplegar') {
       steps {
         build job: 'Proyecto-Final-Devops-Despliegue', propagate: false
