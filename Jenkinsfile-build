@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Clonar repositorio') {
       steps {
-          git branch: 'Develop', url: 'https://github.com/JorchCanelo/Proyecto-DevOps-2023.git'
+          git branch: 'develop', url: 'https://github.com/JorchCanelo/Proyecto-DevOps-2023.git'
         }
       }   
     stage('Instalar dependencias') {
@@ -17,8 +17,8 @@ pipeline {
       }
     }
     stage('Detener contenedores'){
-      steps{
-        powershell 'docker stop $(docker ps -aq)'
+      steps {
+        powershell 'docker stop $(docker ps -q --filter "publish=5000")'
       }
     }
     stage('Desplegar') {

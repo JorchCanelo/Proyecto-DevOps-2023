@@ -8,10 +8,10 @@ const { logger, debug, obfuscateSensitiveData } = require('../../dataAccess/logg
 
 router.get('/history/getAll', authorizer.verificarToken, (req, res) => {
 	// Loggear llamada de la API en INFO
-	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
-	// Loggear body de la llamada en DEBUG
-	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    // Loggear body de la llamada en DEBUG
+    debug.debug(`Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
 	connection.query('SELECT * FROM historial', (error, results) => {
 		logger.info("SELECT * FROM historial ");
@@ -35,10 +35,10 @@ router.get('/history/getHistory/:id', authorizer.verificarToken, (req, res) => {
 	const id = req.params.id;
 
 	// Loggear llamada de la API en INFO
-	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
-	// Loggear body de la llamada en DEBUG
-	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    // Loggear body de la llamada en DEBUG
+    debug.debug(`Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
 	connection.query('SELECT * FROM historial WHERE id = ?', [id], (error, results) => {
 		logger.info("SELECT * FROM historial WHERE id = " + id);
@@ -65,10 +65,10 @@ router.post('/history/addHistory', authorizer.verificarToken, (req, res) => {
 	var sql = "INSERT INTO historial SET ?";
 
 	// Loggear llamada de la API en INFO
-	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
-	// Loggear body de la llamada en DEBUG
-	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    // Loggear body de la llamada en DEBUG
+    debug.debug(`Request body ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query(sql, { fecha_cambio: registro.fecha_cambio, detalle_cambio: registro.detalle_cambio, responsable: registro.responsable, proyecto_asignado: registro.proyecto_asignado }, async (error, results) => {
 		logger.info("INSERT INTO historial SET "+ registro.fecha_cambio + registro.detalle_cambio + registro.responsable + registro.proyecto_asignado);
@@ -95,10 +95,10 @@ router.put('/history/update/:id', authorizer.verificarToken, (req, res) => {
 	const updatedHistory = { fecha_cambio, detalle_cambio, responsable, proyecto_asignado };
 
 	// Loggear llamada de la API en INFO
-	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
-	// Loggear body de la llamada en DEBUG
-	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    // Loggear body de la llamada en DEBUG
+    debug.debug(`Request body ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query(sql, [updatedHistory, id], (error, result) => {
 		logger.info("UPDATE historial SET "+  fecha_cambio + detalle_cambio + responsable + proyecto_asignado + "WHERE id = "+ id );
@@ -126,10 +126,10 @@ router.delete('/history/delete/:id', authorizer.verificarToken, (req, res) => {
 	const id = req.params.id;
 
 	// Loggear llamada de la API en INFO
-	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
-	// Loggear body de la llamada en DEBUG
-	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    // Loggear body de la llamada en DEBUG
+    debug.debug(`Request body ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query('DELETE FROM historial WHERE id = ?', [id], (error, result) => {
 		logger.info("DELETE FROM historial WHERE id = "+ id);
