@@ -15,6 +15,7 @@ router.get('/tasks/getAll', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('SELECT * FROM tareas', (error, results) => {
+        logger.info("SELECT * FROM tareas ");
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -39,7 +40,7 @@ router.get('/tasks/getTask/:id', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('SELECT * FROM tareas WHERE id = ?', [id], (error, results) => {
-
+    logger.info("SELECT * FROM tareas WHERE id = " + id);
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -69,6 +70,7 @@ router.post('/tasks/addTask', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query(sql, { nombre: tarea.nombre, descripcion: tarea.descripcion, estado: tarea.estado, fecha_entrega: tarea.fecha_entrega, proyecto_asociado: tarea.proyecto_asociado }, async (error, results) => {
+        logger.info("INSERT INTO tareas SET "+ tarea.nombre + tarea.descripcion + tarea.estado + tarea.fecha_entrega +  tarea.proyecto_asociado );
         try {
             if (error) {
                 debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(tarea.nombre)} no es válida`);
@@ -98,6 +100,7 @@ router.put('/tasks/update/:id', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query(sql, [updatedTask, id], (error, result) => {
+        logger.info("UPDATE tareas SET "+  nombre + descripcion  + estado + fecha_entrega + proyecto_asociado + "WHERE id = "+ id );
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -127,6 +130,7 @@ router.delete('/tasks/delete/:id', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('DELETE FROM tareas WHERE id = ?', [id], (error, result) => {
+        logger.info("DELETE FROM tareas WHERE id = "+ id);
         try {
             if (error) {
                 logger.error(error.stack || error);

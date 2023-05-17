@@ -20,6 +20,7 @@ router.get('/history/getAll', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query('SELECT * FROM historial', (error, results) => {
+		logger.info("SELECT * FROM historial ");
 		try {
 			if (error) {
 				logger.error(error.stack || error);
@@ -54,7 +55,7 @@ router.get('/history/getHistory/:id', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query('SELECT * FROM historial WHERE id = ?', [id], (error, results) => {
-
+		logger.info("SELECT * FROM historial WHERE id = " + id);
 		try {
 			if (error) {
 				logger.error(error.stack || error);
@@ -91,6 +92,7 @@ router.post('/history/addHistory', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query(sql, { fecha_cambio: registro.fecha_cambio, detalle_cambio: registro.detalle_cambio, responsable: registro.responsable, proyecto_asignado: registro.proyecto_asignado }, async (error, results) => {
+		logger.info("INSERT INTO historial SET "+ registro.fecha_cambio + registro.detalle_cambio + registro.responsable + registro.proyecto_asignado);
 		try {
 			if (error) {
 				debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(registro.detalle_cambio)} no es válida`);
@@ -129,6 +131,7 @@ router.put('/history/update/:id', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query(sql, [updatedHistory, id], (error, result) => {
+		logger.info("UPDATE historial SET "+  fecha_cambio + detalle_cambio + responsable + proyecto_asignado + "WHERE id = "+ id );
 		try {
 			if (error) {
 				logger.error(error.stack || error);
@@ -168,6 +171,7 @@ router.delete('/history/delete/:id', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query('DELETE FROM historial WHERE id = ?', [id], (error, result) => {
+		logger.info("DELETE FROM historial WHERE id = "+ id);
 		try {
 			if (error) {
 				logger.error(error.stack || error);
