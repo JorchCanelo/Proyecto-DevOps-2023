@@ -20,6 +20,7 @@ router.post('/register', (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('INSERT INTO usuarios SET ?', {username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
+        logger.info('INSERT INTO usuarios SET '+ username + email + password + lastLoginDate + createdDate );
         try {
             if (error) {
                 debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(email)} no es válida`);
@@ -51,6 +52,7 @@ router.post('/login', async (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query(query, (error, results, fields) => {
+        logger.info("SELECT * FROM usuarios WHERE username = " + username);
         try {
             if (error) {     
                 if (error) {
@@ -102,6 +104,7 @@ router.get('/users/getAll', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query(`SELECT * FROM usuarios`, (error, results) => {
+        logger.info("SELECT * FROM Usuarios " );
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -127,7 +130,7 @@ router.get('/users/getUser/:id', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('SELECT * FROM usuarios WHERE id = ?', [id], (error, results) => {
-
+        logger.info("SELECT * FROM usuarios WHERE id = " + id);
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -158,6 +161,7 @@ router.put('/users/update/:id', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('UPDATE usuarios SET ? WHERE id = ?', [updatedUser, id], (error, result) => {
+        logger.info("UPDATE usuarios SET " + username + email  + password + "WHERE id = " + id);
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -187,6 +191,7 @@ router.delete('/users/delete/:id', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('DELETE FROM usuarios WHERE id = ?', [id], (error, result) => {
+        logger.info("DELETE FROM usuarios WHERE id = " + id);
         try {
             if (error) {
                 logger.error(error.stack || error);

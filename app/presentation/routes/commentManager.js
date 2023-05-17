@@ -16,6 +16,7 @@ router.get('/comments/getAll', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('SELECT * FROM comentarios', (error, results) => {
+        logger.info("SELECT * FROM comentarios ");
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -40,6 +41,7 @@ router.get('/comments/getComment/:id', authorizer.verificarToken, (req, res) => 
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('SELECT * FROM comentarios WHERE id = ?', [id], (error, results) => {
+        logger.info("SELECT * FROM comentarios WHERE id = "+ id );
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -67,6 +69,7 @@ router.post('/comments/addComment', authorizer.verificarToken, (req, res) => {
     // Loggear body de la llamada en DEBUG
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
     connection.query(sql, { autor: comentario.autor, contenido: comentario.contenido, fecha: comentario.fecha, estado: comentario.estado, tarea_asociada: comentario.tarea_asociada }, async (error, results) => {
+        logger.info("INSERT INTO comentarios SET "+ comentario.autor + comentario.contenido + comentario.fecha + comentario.estado);
         try {
             if (error) {
                 debug.warn(`Error de validacion: La entrada no es válida`);
@@ -96,6 +99,7 @@ router.put('/comments/update/:id', authorizer.verificarToken, (req, res) => {
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query(sql, [updatedComment, id], (error, result) => {
+        logger.info("UPDATE comentarios SET "+  autor + contenido + fecha + estado + tarea_asociada + "WHERE id = "+ id );
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -124,6 +128,7 @@ router.delete('/comments/delete/:id', authorizer.verificarToken, (req, res) => {
     // Loggear body de la llamada en DEBUG
     debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
     connection.query('DELETE FROM comentarios WHERE id = ?', [id], (error, result) => {
+        logger.info("DELETE FROM comentarios WHERE id = "+ id);
         try {
             if (error) {
                 logger.error(error.stack || error);
