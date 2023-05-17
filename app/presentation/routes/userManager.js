@@ -14,13 +14,12 @@ router.post('/register', (req, res) => {
     const lastLoginDate = 'Default';
 
     // Loggear llamada de la API en INFO
-    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
     // Loggear body de la llamada en DEBUG
-    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    debug.debug(`Request body ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('INSERT INTO usuarios SET ?', {username: username, email: email, password: password, lastLoginDate, createdDate: createdDate }, async (error, results) => {
-        logger.info('INSERT INTO usuarios SET '+ username + email + password + lastLoginDate + createdDate );
         try {
             if (error) {
                 debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(email)} no es válida`);
@@ -45,14 +44,13 @@ router.post('/login', async (req, res) => {
     const loginDate = date.toLocaleString();
     const dateQuery = `UPDATE usuarios SET lastLoginDate = '${loginDate}' WHERE username = '${username}'`;
 
-    // Loggear llamada de la API en INFO
-    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+   // Loggear llamada de la API en INFO
+   logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
-    // Loggear body de la llamada en DEBUG
-    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+   // Loggear body de la llamada en DEBUG
+   debug.debug(`Request body ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query(query, (error, results, fields) => {
-        logger.info("SELECT * FROM usuarios WHERE username = " + username);
         try {
             if (error) {     
                 if (error) {
@@ -98,13 +96,12 @@ router.post('/login', async (req, res) => {
 router.get('/users/getAll', authorizer.verificarToken, (req, res) => {
 
     // Loggear llamada de la API en INFO
-    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
     // Loggear body de la llamada en DEBUG
-    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    debug.debug(`Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
     connection.query(`SELECT * FROM usuarios`, (error, results) => {
-        logger.info("SELECT * FROM Usuarios " );
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -124,13 +121,13 @@ router.get('/users/getUser/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO
-    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
     // Loggear body de la llamada en DEBUG
-    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    debug.debug(`Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
     connection.query('SELECT * FROM usuarios WHERE id = ?', [id], (error, results) => {
-        logger.info("SELECT * FROM usuarios WHERE id = " + id);
+
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -155,13 +152,12 @@ router.put('/users/update/:id', authorizer.verificarToken, (req, res) => {
     const updatedUser = { username, email, password };
 
     // Loggear llamada de la API en INFO
-    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
     // Loggear body de la llamada en DEBUG
-    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    debug.debug(`Request body ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('UPDATE usuarios SET ? WHERE id = ?', [updatedUser, id], (error, result) => {
-        logger.info("UPDATE usuarios SET " + username + email  + password + "WHERE id = " + id);
         try {
             if (error) {
                 logger.error(error.stack || error);
@@ -185,13 +181,12 @@ router.delete('/users/delete/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
 
     // Loggear llamada de la API en INFO
-    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
+    logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)}  Headers: ${JSON.stringify(req.headers)}`);
 
     // Loggear body de la llamada en DEBUG
-    debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
+    debug.debug(`Request body ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
     connection.query('DELETE FROM usuarios WHERE id = ?', [id], (error, result) => {
-        logger.info("DELETE FROM usuarios WHERE id = " + id);
         try {
             if (error) {
                 logger.error(error.stack || error);
