@@ -7,12 +7,6 @@ const { logger, debug, obfuscateSensitiveData } = require('../../dataAccess/logg
 //history
 
 router.get('/history/getAll', authorizer.verificarToken, (req, res) => {
-	connection.query('SELECT * FROM historial', (error, rows, fields) => {
-		if (!error)
-			res.json({ rows });
-		else
-			res.status(500).json({ error });
-	})
 	// Loggear llamada de la API en INFO
 	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
 
@@ -37,14 +31,6 @@ router.get('/history/getAll', authorizer.verificarToken, (req, res) => {
 
 
 router.get('/history/getHistory/:id', authorizer.verificarToken, (req, res) => {
-	connection.query('SELECT * FROM historial WHERE proyecto_asignado = ?', [req.params.id], (error, rows, fields) => {
-		if (!error)
-			res.json({ rows });
-		else
-			res.status(500).json({ error });
-	})
-
-
 	const id = req.params.id;
 
 	// Loggear llamada de la API en INFO
@@ -74,13 +60,6 @@ router.get('/history/getHistory/:id', authorizer.verificarToken, (req, res) => {
 
 router.post('/history/addHistory', authorizer.verificarToken, (req, res) => {
 	let registro = req.body;
-	var sql = "INSERT INTO historial (fecha_cambio, detalle_cambio, responsable, proyecto_asignado) VALUES (?, ?, ?, ?)";
-	connection.query(sql, [registro.fecha_cambio, registro.detalle_cambio, registro.responsable, registro.proyecto_asignado], (error, rows, fields) => {
-		if (!err)
-			res.json({ message: 'Registro de historial agregado exitosamente.' });
-		else
-			res.status(500).json({ error });
-	})
 
 	var sql = "INSERT INTO historial SET ?";
 
@@ -108,15 +87,6 @@ router.post('/history/addHistory', authorizer.verificarToken, (req, res) => {
 
 
 router.put('/history/update/:id', authorizer.verificarToken, (req, res) => {
-	let registro = req.body;
-	var sql = "UPDATE historial SET fecha_cambio = ?, detalle_cambio = ?, responsable = ?, proyecto_asignado = ? WHERE id = ?";
-	connection.query(sql, [registro.fecha_cambio, registro.detalle_cambio, registro.responsable, registro.proyecto_asignado, req.params.id], (err, rows, fields) => {
-		if (!err)
-			res.json({ message: 'Registro de historial actualizado exitosamente.' });
-		else
-			res.status(500).json({ error });
-	})
-
 	const id = req.params.id;
 	var sql = "UPDATE historial SET ? WHERE id = ?";
 	const { fecha_cambio, detalle_cambio, responsable, proyecto_asignado } = req.body;
@@ -151,15 +121,6 @@ router.put('/history/update/:id', authorizer.verificarToken, (req, res) => {
 
 router.delete('/history/delete/:id', authorizer.verificarToken, (req, res) => {
 	const id = req.params.id;
-	connection.query('DELETE FROM historial WHERE id = ?', id, (error, results) => {
-		if (error) {
-			res.status(500).json({ error });
-		} else if (results.affectedRows === 0) {
-			res.status(404).json({ message: 'Historial no encontrado' });
-		} else {
-			res.json({ message: 'Historial eliminado' });
-		}
-	})
 
 	// Loggear llamada de la API en INFO
 	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);

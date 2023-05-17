@@ -2,16 +2,11 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../../dataAccess/databaseConnection');
 const authorizer = require('../../dataAccess/authorizer');
+const { logger, debug, obfuscateSensitiveData } = require('../../dataAccess/logger');
 
 //projects
 
 router.get('/projects/getAll', authorizer.verificarToken, (req, res) => {
-	connection.query('SELECT * FROM proyectos', (err, rows, fields) => {
-		if (!err)
-			res.json({ rows });
-		else
-			res.status(500).json({ error });
-	})
 
 	// Loggear llamada de la API en INFO
 	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
@@ -35,13 +30,6 @@ router.get('/projects/getAll', authorizer.verificarToken, (req, res) => {
 });
 
 router.get('/projects/getProject/:id', authorizer.verificarToken, (req, res) => {
-	connection.query('SELECT * FROM proyectos WHERE id = ?', [req.params.id], (err, rows, fields) => {
-		if (!err)
-			res.json({ rows });
-		else
-			res.status(500).json({ error });
-	})
-
 	const id = req.params.id;
 
 	// Loggear llamada de la API en INFO
@@ -71,14 +59,7 @@ router.get('/projects/getProject/:id', authorizer.verificarToken, (req, res) => 
 });
 
 router.post('/projects/addProject', authorizer.verificarToken, (req, res) => {
-	let proyecto = req.body;
-	var sql = "INSERT INTO proyectos (nombre, descripcion, materia, fecha_entrega, usuario_asignado) VALUES (?, ?, ?, ?, ?)";
-	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado], (error, rows, fields) => {
-		if (!error)
-			res.json({ message: 'Proyecto agregado exitosamente.' });
-		else
-			res.status(500).json({ error });
-	})
+	const proyecto = req.body;
 
 	var sql = "INSERT INTO proyectos SET ?";
 
@@ -106,15 +87,6 @@ router.post('/projects/addProject', authorizer.verificarToken, (req, res) => {
 });
 
 router.put('/projects/update/:id', authorizer.verificarToken, (req, res) => {
-	let proyecto = req.body;
-	var sql = "UPDATE proyectos SET nombre = ?, descripcion = ?, materia = ?, fecha_entrega = ?, usuario_asignado = ? WHERE id = ?";
-	connection.query(sql, [proyecto.nombre, proyecto.descripcion, proyecto.materia, proyecto.fecha_entrega, proyecto.usuario_asignado, req.params.id], (err, rows, fields) => {
-		if (!err)
-			res.json({ message: 'Proyecto actualizado exitosamente.' });
-		else
-			res.status(500).json({ error });
-	})
-
 	const id = req.params.id;
 	var sql = "UPDATE proyectos SET ? WHERE id = ?";
 	const { nombre, descripcion, materia, fecha_entrega, usuario_asignado } = req.body;
@@ -147,16 +119,7 @@ router.put('/projects/update/:id', authorizer.verificarToken, (req, res) => {
 });
 
 router.delete('/projects/delete/:id', authorizer.verificarToken, (req, res) => {
-	connection.query('DELETE FROM proyectos WHERE id = ?', [req.params.id], (error, rows, fields) => {
-		if (error) {
-			res.status(500).json({ error });
-		} else if (results.affectedRows === 0) {
-			res.status(404).json({ message: 'Proyecto no encontrado' });
-		} else {
-			res.json({ message: 'Proyecto eliminado' });
-		}
-	})
-
+    const id = req.params.id;
 
 	// Loggear llamada de la API en INFO
 	logger.info(`${req.method} ${req.originalUrl} - Query parameters: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify(req.headers)}`);
