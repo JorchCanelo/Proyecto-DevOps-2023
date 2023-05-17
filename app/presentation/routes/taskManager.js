@@ -74,7 +74,7 @@ router.post('/tasks/addTask', authorizer.verificarToken, (req, res) => {
                 debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(tarea.nombre)} no es válida`);
                 res.status(400).json({ error: `${tarea.nombre} no válido.` });
             } else {
-                res.json('Registro exitoso.')
+                res.json('Registro exitoso.');
             }
         } catch (catchError) {
             logger.error(catchError.stack || catchError);
@@ -87,7 +87,7 @@ router.post('/tasks/addTask', authorizer.verificarToken, (req, res) => {
 
 router.put('/tasks/update/:id', authorizer.verificarToken, (req, res) => {
     const id = req.params.id;
-    var sql = "UPDATE usuarios SET ? WHERE id = ?";
+    var sql = "UPDATE tareas SET ? WHERE id = ?";
     const { nombre, descripcion, estado, fecha_entrega, proyecto_asociado } = req.body;
     const updatedTask = { nombre, descripcion, estado, fecha_entrega, proyecto_asociado };
 

@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 30-03-2023 a las 02:43:07
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.2.0
+-- Host: bgsve6lua6mfbqdylbbs-mysql.services.clever-cloud.com:3306
+-- Generation Time: May 17, 2023 at 12:45 AM
+-- Server version: 8.0.15-5
+-- PHP Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,34 +19,34 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `agenda`
+-- Database: `bgsve6lua6mfbqdylbbs`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comentarios`
+-- Table structure for table `comentarios`
 --
 
 CREATE TABLE `comentarios` (
   `id` int(11) NOT NULL,
-  `autor` varchar(50) NOT NULL,
-  `contenido` varchar(200) NOT NULL,
+  `autor` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `contenido` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
   `fecha` date NOT NULL,
-  `estado` varchar(50) NOT NULL,
+  `estado` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `tarea_asociada` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `historial`
+-- Table structure for table `historial`
 --
 
 CREATE TABLE `historial` (
   `id` int(11) NOT NULL,
-  `fecha_cambio` varchar(50) NOT NULL,
-  `detalle_cambio` varchar(500) NOT NULL,
+  `fecha_cambio` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `detalle_cambio` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
   `responsable` int(11) NOT NULL,
   `proyecto_asignado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -53,149 +54,116 @@ CREATE TABLE `historial` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `proyectos`
+-- Table structure for table `proyectos`
 --
 
 CREATE TABLE `proyectos` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(200) NOT NULL,
-  `materia` varchar(50) NOT NULL,
-  `fecha_entrega` varchar(50) NOT NULL,
+  `nombre` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `materia` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `fecha_entrega` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `usuario_asignado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tareas`
+-- Table structure for table `tareas`
 --
 
 CREATE TABLE `tareas` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(200) NOT NULL,
-  `estado` varchar(20) NOT NULL,
-  `fecha_entrega` varchar(50) NOT NULL,
+  `nombre` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `fecha_entrega` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `proyecto_asociado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios`
+-- Table structure for table `usuarios`
 --
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `lastLoginDate` varchar(50) NOT NULL,
-  `createdDate` varchar(50) NOT NULL
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `lastLoginDate` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `createdDate` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Índices para tablas volcadas
+
 --
 
 --
--- Indices de la tabla `comentarios`
+-- Indexes for table `comentarios`
 --
 ALTER TABLE `comentarios`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tarea_asociada` (`tarea_asociada`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `historial`
+-- Indexes for table `historial`
 --
 ALTER TABLE `historial`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `responsable_ibfk_1` (`responsable`),
-  ADD KEY `proyecto_ibfk_1` (`proyecto_asignado`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `proyectos`
+-- Indexes for table `proyectos`
 --
 ALTER TABLE `proyectos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `usuario_asignado` (`usuario_asignado`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `tareas`
+-- Indexes for table `tareas`
 --
 ALTER TABLE `tareas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `proyecto_asociado` (`proyecto_asociado`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `comentarios`
+-- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `historial`
+-- AUTO_INCREMENT for table `historial`
 --
 ALTER TABLE `historial`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `proyectos`
+-- AUTO_INCREMENT for table `proyectos`
 --
 ALTER TABLE `proyectos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `tareas`
+-- AUTO_INCREMENT for table `tareas`
 --
 ALTER TABLE `tareas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `comentarios`
---
-ALTER TABLE `comentarios`
-  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`tarea_asociada`) REFERENCES `tareas` (`id`);
-
---
--- Filtros para la tabla `historial`
---
-ALTER TABLE `historial`
-  ADD CONSTRAINT `proyecto_ibfk_1` FOREIGN KEY (`proyecto_asignado`) REFERENCES `proyectos` (`id`),
-  ADD CONSTRAINT `responsable_ibfk_1` FOREIGN KEY (`responsable`) REFERENCES `usuarios` (`id`);
-
---
--- Filtros para la tabla `proyectos`
---
-ALTER TABLE `proyectos`
-  ADD CONSTRAINT `proyectos_ibfk_1` FOREIGN KEY (`usuario_asignado`) REFERENCES `usuarios` (`id`);
-
---
--- Filtros para la tabla `tareas`
---
-ALTER TABLE `tareas`
-  ADD CONSTRAINT `tareas_ibfk_1` FOREIGN KEY (`proyecto_asociado`) REFERENCES `proyectos` (`id`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
