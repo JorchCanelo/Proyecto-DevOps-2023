@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Clonar repositorio') {
       steps {
-          git branch: 'develop', url: 'https://github.com/JorchCanelo/Proyecto-DevOps-2023.git'
+          git branch: 'Develop', url: 'https://github.com/JorchCanelo/Proyecto-DevOps-2023.git'
         }
       }   
     stage('Instalar dependencias') {
