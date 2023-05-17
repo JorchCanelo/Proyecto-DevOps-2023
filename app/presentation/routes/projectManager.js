@@ -15,6 +15,7 @@ router.get('/projects/getAll', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query('SELECT * FROM proyectos', (error, results) => {
+		logger.info("SELECT * FROM proyectos ");
 		try {
 			if (error) {
 				logger.error(error.stack || error);
@@ -39,7 +40,7 @@ router.get('/projects/getProject/:id', authorizer.verificarToken, (req, res) => 
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query('SELECT * FROM proyectos WHERE id = ?', [id], (error, results) => {
-
+		logger.info("SELECT * FROM proyectos WHERE id = " + id);
 		try {
 			if (error) {
 				logger.error(error.stack || error);
@@ -70,6 +71,7 @@ router.post('/projects/addProject', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query(sql, { nombre: proyecto.nombre, descripcion: proyecto.descripcion, materia: proyecto.materia, fecha_entrega: proyecto.fecha_entrega, usuario_asignado: proyecto.usuario_asignado }, async (error, results) => {
+		logger.info("INSERT INTO proyectos SET "+ proyecto.nombre + proyecto.descripcion + proyecto.materia + proyecto.fecha_entrega, proyecto.usuario_asignado );
 		try {
 			if (error) {
 				debug.warn(`Error de validacion: La entrada ${obfuscateSensitiveData(proyecto.nombre)} no es válida`);
@@ -99,6 +101,7 @@ router.put('/projects/update/:id', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query(sql, [updatedProject, id], (error, result) => {
+		logger.info("UPDATE proyectos SET "+  nombre + descripcion + materia + fecha_entrega + usuario_asignado + "WHERE id = "+ id );
 		try {
 			if (error) {
 				logger.error(error.stack || error);
@@ -128,6 +131,7 @@ router.delete('/projects/delete/:id', authorizer.verificarToken, (req, res) => {
 	debug.debug(`Request body: ${JSON.stringify(obfuscateSensitiveData(req.body))}`);
 
 	connection.query('DELETE FROM proyectos WHERE id = ?', [id], (error, result) => {
+		logger.info("DELETE FROM proyectos WHERE id = "+ id);
 		try {
 			if (error) {
 				logger.error(error.stack || error);
