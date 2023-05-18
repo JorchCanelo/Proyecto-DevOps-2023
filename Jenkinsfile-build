@@ -18,7 +18,7 @@ pipeline {
     }
     stage('Detener contenedores') {
       steps {
-       powershell 'docker ps -q --filter "publish=5000" | Write-Output  "No hay puerto ocupado"'
+       powershell 'docker ps -q --filter "label=project=backend"'
       }
     }
     stage('Desplegar') {
