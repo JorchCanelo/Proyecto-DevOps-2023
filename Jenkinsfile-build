@@ -17,14 +17,15 @@ pipeline {
       }
     }
     stage('Detener contenedores') {
-      steps {
-        $containers = docker ps -q --filter 'publish=5000'
-        if ($containers) {
-          docker stop $containers
-        } else {
-          echo(message: 'No se encontraron contenedores en el puerto 5000.')  
+        steps {
+          powershell(
+          $containers = docker ps -q --filter 'publish=5000'
+          if ($containers) {
+            docker stop $containers
+          } else {
+            echo(message: 'No se encontraron contenedores en el puerto 5000.')  
+          })
         }
-      }
     }
     stage('Desplegar') {
       steps {
