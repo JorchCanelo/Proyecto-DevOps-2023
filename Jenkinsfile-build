@@ -22,7 +22,7 @@ pipeline {
         if ($containers) {
           docker stop $containers
         } else {
-          Write-Host 'No se encontraron contenedores en el puerto 5000.'
+          echo(message: 'No se encontraron contenedores en el puerto 5000.')  
         }
       }
     }
