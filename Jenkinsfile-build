@@ -16,9 +16,14 @@ pipeline {
         powershell 'npm test -- --forceExit' 
       }
     }
-    stage('Detener contenedores'){
+    stage('Detener contenedores') {
       steps {
-        powershell -Command "$containers = docker ps -q --filter 'publish=5000'; if ($containers) { docker stop $containers } else { Write-Host 'No se encontraron contenedores en el puerto 5000.' }"
+        $containers = docker ps -q --filter 'publish=5000'
+        if ($containers) {
+          docker stop $containers
+        } else {
+          Write-Host 'No se encontraron contenedores en el puerto 5000.'
+        }
       }
     }
     stage('Desplegar') {
