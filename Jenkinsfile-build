@@ -18,7 +18,7 @@ pipeline {
     }
     stage('Detener contenedores') {
       steps {
-       powershell 'docker ps -q --filter "label=project=backend"'
+       powershell 'docker stop $(docker ps -q --filter "label=project=backend")'
       }
     }
     stage('Desplegar') {
