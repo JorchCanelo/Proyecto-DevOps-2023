@@ -4,7 +4,7 @@ pipeline {
     stage('Construir y desplegar') {
         steps {
         powershell "docker build -f Dockerfile -t backend-${env.GIT_BRANCH}:1.0.0-${env.BUILD_NUMBER} ."
-        powershell "docker run --label project=backend --restart=always -p 5000:5000 -d backend-${env.GIT_BRANCH}:1.0.0-${env.BUILD_NUMBER}"
+        powershell "docker run --restart=always -p 5000:5000 -d backend-${env.GIT_BRANCH}:1.0.0-${env.BUILD_NUMBER}"
       }
     }
   }
