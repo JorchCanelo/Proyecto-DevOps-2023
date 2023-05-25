@@ -8,7 +8,7 @@ pipeline {
       }
     }
     stage('Elastic') {
-      step{
+      steps{
         powershell 'CONTAINER_ID=$(docker ps -aqf "name=backend")'
       }
       steps{
