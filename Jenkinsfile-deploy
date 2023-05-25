@@ -11,7 +11,8 @@ pipeline {
     stage('Elastic') {
       steps{
         powershell 'docker rm filebeat'
-        powershell '$USERLOL=$env:USERPROFILE.Replace("\", "/")'
+        powershell '$BACKSLASHLMAO="\"'
+        powershell "$USERLOL=$env:USERPROFILE.Replace('\', '/')"
         powershell '$CONTAINER_ID=$(docker ps -aqf "name=backend")'
         powershell 'docker run -d --name=filebeat --user=root --volume="${USERLOL}/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro" --volume="/var/lib/docker/containers:/var/lib/docker/containers:ro" --volume="/var/run/docker.sock:/var/run/docker.sock:ro" --volume="/var/log:/host/var/log:ro" -e CONTAINER_LOG_PATH="/var/lib/docker/containers/${CONTAINER_ID}/*.log" docker.elastic.co/beats/filebeat:8.7.1 filebeat -e --strict.perms=false -E cloud.id=dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyRjOWQxMjJkOTQwYzc0OGNhYmZhYjcwMWMwOTg1MTA1ZSRmMzhlMzg3OTIwODM0MTk2YTZmYmIzOGM0NDlkMDU5Zg== -E cloud.auth=elastic:zEha5AoI86Zz1zyWKUXE5EhM'
       }
