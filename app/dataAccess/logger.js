@@ -1,18 +1,22 @@
 const winston = require('winston');
+const ecsFormat = require('@elastic/ecs-winston-format');
 
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.simple()
+    winston.format.simple(),
+    ecsFormat({ convertReqRes: true }),
   ),
   transports: [
     new winston.transports.File({
       filename: 'logs/info.log',
       format: winston.format.printf(({ level, message, timestamp }) => {
         return `${timestamp} [${level}]: ${message}`;
-      })
-    })
+      }),
+      level: 'info'
+    }),
+
   ]
 });
 
@@ -20,14 +24,16 @@ const debug = winston.createLogger({
   level: 'debug',
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.simple()
+    winston.format.simple(),
+    ecsFormat({ convertReqRes: true }),
   ),
   transports: [
     new winston.transports.File({
       filename: 'logs/debug.log',
       format: winston.format.printf(({ level, message, timestamp }) => {
         return `${timestamp} [${level}]: ${message}`;
-      })
+      }),
+      level: 'debug'
     })
   ]
 });
