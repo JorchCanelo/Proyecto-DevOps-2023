@@ -10,7 +10,7 @@ const port = process.env.PORT;
 
 console.log(process.env.PORT);
 
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: 'http://192.168.1.95:81' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
