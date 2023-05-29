@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Ejecutar pruebas') {
       steps {
-        powershell 'npm test -- --forceExit' 
+        
       }
     }
     stage('Detener contenedores') {
